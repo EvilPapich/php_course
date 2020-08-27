@@ -117,7 +117,7 @@
       print "<h3>Задание 3.</h3>";
       print "<h4>строки где есть буквосочетание \"av\" или \"ab\"</h4>"; //смотреть 52-53 строчки этого кода
 
-      $query = "select * from users where name like '%av' or '%ab%'";
+      $query = "select * from users where name like '%av' or name like '%ab%'";
 
       $resultAsArray = $con->query($query)->fetchAll(PDO::FETCH_ASSOC);
       $resultAsJson = json_encode($resultAsArray);
