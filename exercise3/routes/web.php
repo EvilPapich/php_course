@@ -12,5 +12,16 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+  //return view('welcome');
+  return view('start');
+});
+
+Route::get('/login', function () {
+  return view('login');
+});
+
+Route::middleware('app.auth')->group(function () {
+  Route::get('/home', function () {
+    return view('home');
+  });
 });

@@ -12,4 +12,8 @@ class Author extends Model
     public function posts() {
       return $this->belongsToMany('App\Models\Post');
     }
+
+    public function user() {
+      return $this->hasOne('App\Models\User');
+    }
 }

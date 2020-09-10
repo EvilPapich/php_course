@@ -14,13 +14,17 @@ class CreateAuthorsTable extends Migration
     public function up()
     {
         Schema::create('authors', function (Blueprint $table) {
-            $table->bigIncrements('id');
+          $table->bigIncrements('id');
 
-            $table->string('lname');
-            $table->string('fname');
+          $table->string('lname');
+          $table->string('fname');
 
-            $table->timestamps();
-            $table->softDeletes();
+          $table->unsignedBigInteger('user_id');
+          $table->foreign('user_id')->references('id')->on('users');
+
+          $table->timestamp('created_at')->useCurrent();
+          $table->timestamp('updated_at')->nullable();
+          $table->softDeletes();
         });
     }
 

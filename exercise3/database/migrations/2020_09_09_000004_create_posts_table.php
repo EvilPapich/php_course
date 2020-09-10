@@ -14,19 +14,20 @@ class CreatePostsTable extends Migration
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->bigIncrements('id');
+          $table->bigIncrements('id');
 
-            $table->string('title');
-            $table->text('text');
+          $table->string('title');
+          $table->text('text');
 
-            $table->unsignedBigInteger('status_id');
-            $table->foreign('status_id')->references('id')->on('statuses');
+          $table->unsignedBigInteger('status_id');
+          $table->foreign('status_id')->references('id')->on('statuses');
 
-            $table->unsignedBigInteger('author_id');
-            $table->foreign('author_id')->references('id')->on('authors');
+          $table->unsignedBigInteger('author_id');
+          $table->foreign('author_id')->references('id')->on('authors');
 
-            $table->timestamps();
-            $table->softDeletes();
+          $table->timestamp('created_at')->useCurrent();
+          $table->timestamp('updated_at')->nullable();
+          $table->softDeletes();
         });
     }
 
