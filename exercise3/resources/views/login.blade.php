@@ -10,75 +10,86 @@
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
   <!-- Styles -->
-  <style>
-    html, body {
-      background-color: #fff;
-      color: #636b6f;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 200;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .full-height {
-      height: 100vh;
-    }
-
-    .flex-center {
-      align-items: center;
-      display: flex;
-      justify-content: center;
-    }
-
-    .position-ref {
-      position: relative;
-    }
-
-    .top-right {
-      position: absolute;
-      right: 10px;
-      top: 18px;
-    }
-
-    .content {
-      text-align: center;
-    }
-
-    .title {
-      font-size: 84px;
-    }
-
-    .links > a {
-      color: #636b6f;
-      padding: 0 25px;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: .1rem;
-      text-decoration: none;
-      text-transform: uppercase;
-    }
-
-    .m-b-md {
-      margin-bottom: 30px;
-    }
-  </style>
+  <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/login.css') }}" rel="stylesheet">
 </head>
 <body>
-<div class="flex-center position-ref full-height">
-  <div class="content">
-    <div class="title m-b-md">
-      Вход
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<div id="app">
+  <div class="flex-center position-ref full-height">
+    <div class="content">
+      <div class="title m-b-md">
+        Вход
+      </div>
 
-    <div>
-      <input
-        placeholder="логин"
-      />
-      <input
-        placeholder="пароль"
-      />
+      <div class="login-form">
+        <input
+          class="h3"
+          name="login"
+          placeholder="логин"
+          type="login"
+          v-model="login"
+        />
+        <input
+          class="h3"
+          name="password"
+          placeholder="пароль"
+          type="password"
+          v-model="password"
+        />
+        <button
+          class="h2"
+          name="submit"
+          type="submit"
+          v-on:click="loginHandler"
+        >
+          Войти
+        </button>
+      </div>
     </div>
   </div>
 </div>
+<script>
+  var app = new Vue({
+    el: "#app",
+    data: {
+      data: {},
+      login: "",
+      password: "",
+    },
+    methods: {
+      loginHandler() {
+        fetch('api/login', {
+          method: 'POST',
+          body: JSON.stringify({
+            login: this.login,
+            password: this.password
+          })
+        }).then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).then((res) => {
+          if (res.result) {
+            localStorage.setItem('userId', res.userId);
+            window.location = '/home';
+          } else {
+            alert('Неверные данные');
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
+      },
+    },
+    mounted() {
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        window.location = '/home';
+      }
+    },
+  });
+</script>
 </body>
 </html>

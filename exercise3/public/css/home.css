@@ -1,0 +1,36 @@
+.home-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-header {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  background: #f9f9f9;
+}
+.home-header-title {
+  display: flex;
+  flex: 1;
+}
+.home-header-info {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  align-items: center;
+}
+.profile-info {
+  margin-right: 20px;
+  font-size: 13px;
+}
+.home-header-exit {
+  cursor: pointer;
+}
+.home-header-exit:hover {
+  color: #4c7dff;
+}
+
+.home-content {
+
+}
+

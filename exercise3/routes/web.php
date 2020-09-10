@@ -20,8 +20,6 @@ Route::get('/login', function () {
   return view('login');
 });
 
-Route::middleware('app.auth')->group(function () {
-  Route::get('/home', function () {
-    return view('home');
-  });
+Route::get('/home', function () {
+  return view('home');
 });
