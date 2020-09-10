@@ -22,5 +22,11 @@ class AuthorSeeder extends Seeder
         'fname' => 'Пользователь',
         'user_id' => 2,
       ]);
+
+      DB::table('authors')->insert([
+        'lname' => 'Главный',
+        'fname' => 'Админ',
+        'user_id' => 3
+      ]);
     }
 }
