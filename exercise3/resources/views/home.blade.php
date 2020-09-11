@@ -45,27 +45,38 @@
           <div class="home-posts-list">
             <div>Посты за последние 7 дней:</div>
             <div
-              v-for="(item, index) in posts"
-              key="index"
+              v-for="(post, postIndex) in posts"
+              :key="postIndex"
               class="post-item"
             >
               <div class="post-item-header">
                 <div class="post-item-title">
-                  ${ item.title }
+                  ${ post.title }
                 </div>
                 <div class="post-item-rating">
 
                 </div>
               </div>
               <div class="post-item-text">
-                ${ item.text }
+                ${ post.text }
               </div>
               <div class="post-item-footer">
-                <div class="post-item-created-at">
-                  ${ item.created_at }
+                <div class="post-tags-list">
+                  <div
+                    v-for="(tag, tagIndex) in post.tags"
+                    :key="tagIndex"
+                    class="tag-item"
+                  >
+                    ${ tag.name }
+                  </div>
                 </div>
-                <div class="post-item-author">
-                  ${ item.author.lname } ${ item.author.fname }
+                <div class="post-info">
+                  <div class="post-item-created-at">
+                    ${ post.created_at }
+                  </div>
+                  <div class="post-item-author">
+                    ${ post.author.lname } ${ post.author.fname }
+                  </div>
                 </div>
               </div>
             </div>
@@ -87,6 +98,7 @@
           <input
             name="title"
             type="text"
+            v-model="draft.title"
             placeholder="Заголовок (обязательно)"
           />
         </label>
@@ -94,6 +106,7 @@
           <textarea
             class="draft-editor-textarea"
             name="text"
+            v-model="draft.text"
             placeholder="Текст (обязательно)"
             rows="5"
           ></textarea>
@@ -102,15 +115,20 @@
           <input
             name="tags"
             type="text"
+            v-model="draft.tags"
             placeholder="Введите теги через запятую (не обязательно)"
           />
         </label>
       </div>
       <div class="draft-editor-footer">
-        <div class="draft-editor-save-draft-btn">
+        <div class="draft-editor-save-draft-btn"
+             v-on:click="writeDraft"
+        >
           Сохранить как черновик
         </div>
-        <div class="draft-editor-save-post-btn">
+        <div class="draft-editor-save-post-btn"
+             v-on:click="writePost"
+        >
           Опубликовать
         </div>
       </div>
@@ -127,7 +145,7 @@
       user: {},
       author: {},
       showDraftEditor: false,
-      draft: {title:"title",text:"text"},
+      draft: {},
       myDrafts: [],
       isFetchingPosts: true,
       posts: [],
@@ -171,6 +189,9 @@
           alert(err.message);
         });
       },
+      preparePostTags(tags) {
+        return tags.split(",").map(item => item.trim()).filter(item => item);
+      },
       writeDraft() {
         fetch('api/post/write/draft', {
           method: 'POST',
@@ -181,6 +202,21 @@
             authorId: this.author.id,
             title: this.draft.title,
             text: this.draft.text,
+            tags: this.preparePostTags(this.draft.tags),
+          })
+        }).then(null);
+      },
+      writePost() {
+        fetch('api/post/write/post', {
+          method: 'POST',
+          headers: {
+            [userIdHeader]: this.user.id
+          },
+          body: JSON.stringify({
+            authorId: this.author.id,
+            title: this.draft.title,
+            text: this.draft.text,
+            tags: this.preparePostTags(this.draft.tags),
           })
         }).then(null);
       },
