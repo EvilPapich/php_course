@@ -19,4 +19,12 @@ class UserController
 
     return json_encode($auth);
   }
+
+  public function getUser(Request $request) {
+    $userId = $request->header('x-user-id');
+
+    $user = UserService::getUser($userId);
+
+    return json_encode($user);
+  }
 }

@@ -24,7 +24,10 @@
         </div>
         <div class="home-header-info">
           <div class="profile-info">
-            Антонов Андрей
+            ${ author.lname } ${ author.fname }
+          </div>
+          <div class="user-info">
+            ${ user.name } ${ user.email }
           </div>
           <div
             class="home-header-exit h3"
@@ -40,9 +43,11 @@
 </div>
 <script>
   var app = new Vue({
+    delimiters: ['${', '}'],
     el: "#app",
     data: {
-      data: {},
+      user: {},
+      author: {},
     },
     methods: {
       exitHandler() {
@@ -51,7 +56,41 @@
       }
     },
     mounted() {
+      const userId = localStorage.getItem('userId');
 
+      fetch('api/user/get', {
+        method: 'GET',
+        headers: {
+          'x-user-id': userId,
+        },
+      }).then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error(res.statusText);
+        }
+      }).then((res) => {
+        this.user = res;
+      }).catch((err) => {
+        alert(err.message);
+      });
+
+      fetch('api/author/get', {
+        method: 'GET',
+        headers: {
+          'x-user-id': userId,
+        },
+      }).then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error(res.statusText);
+        }
+      }).then((res) => {
+        this.author = res;
+      }).catch((err) => {
+        alert(err.message);
+      });
     },
   });
 </script>

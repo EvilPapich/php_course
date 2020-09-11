@@ -59,7 +59,7 @@
     },
     methods: {
       loginHandler() {
-        fetch('api/login', {
+        fetch('api/user/login', {
           method: 'POST',
           body: JSON.stringify({
             login: this.login,

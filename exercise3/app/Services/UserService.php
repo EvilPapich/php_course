@@ -36,4 +36,10 @@ class UserService
 
     return $result->count() === 1;
   }
+
+  public static function getUser(Int $userId) {
+    return collect(
+      User::where('id', $userId)->get()
+    )->first();
+  }
 }

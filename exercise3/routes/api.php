@@ -17,11 +17,19 @@ use Illuminate\Http\Request;
     return $request->user();
 });*/
 
-Route::group(['prefix' => 'login'], function () {
-  Route::post('/', 'UserController@signIn');
+Route::group(['prefix' => 'user'], function () {
+  Route::post('/login', 'UserController@signIn');
 });
 
 Route::middleware('app.auth')->group(function () {
+  Route::group(['prefix' => 'user'], function () {
+    Route::get('/get', 'UserController@getUser');
+  });
+
+  Route::group(['prefix' => 'author'], function () {
+    Route::get('/get', 'AuthorController@getAuthor');
+  });
+
   Route::group(['prefix' => 'post'], function () {
     Route::get('/recent', 'PostController@getRecentPosts');
   });
