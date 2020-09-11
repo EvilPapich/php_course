@@ -38,9 +38,9 @@
       </div>
       <div class="home-content">
         <div class="home-content-wrapper">
-          <div class="home-write-post">
+          <div class="home-write-post" v-on:click="showDraftEditor = true">
             <div class="add-icon">+</div>
-            <div class="write-post-btn" v-on:click="writeDraft">Написать пост</div>
+            <div class="write-post-btn">Написать пост</div>
           </div>
           <div class="home-posts-list">
             <div>Посты за последние 7 дней:</div>
@@ -77,6 +77,45 @@
       </div>
     </div>
   </div>
+  <div v-show="showDraftEditor" class="draft-editor-wrapper">
+    <div class="draft-editor">
+      <div class="draft-editor-header">
+        <div class="close-icon" v-on:click="showDraftEditor = false">x</div>
+      </div>
+      <div class="draft-editor-content">
+        <label>
+          <input
+            name="title"
+            type="text"
+            placeholder="Заголовок (обязательно)"
+          />
+        </label>
+        <label>
+          <textarea
+            class="draft-editor-textarea"
+            name="text"
+            placeholder="Текст (обязательно)"
+            rows="5"
+          ></textarea>
+        </label>
+        <label>
+          <input
+            name="tags"
+            type="text"
+            placeholder="Введите теги через запятую (не обязательно)"
+          />
+        </label>
+      </div>
+      <div class="draft-editor-footer">
+        <div class="draft-editor-save-draft-btn">
+          Сохранить как черновик
+        </div>
+        <div class="draft-editor-save-post-btn">
+          Опубликовать
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <script>
   const userIdHeader = 'x-user-id';
@@ -87,6 +126,7 @@
     data: {
       user: {},
       author: {},
+      showDraftEditor: false,
       draft: {title:"title",text:"text"},
       myDrafts: [],
       isFetchingPosts: true,

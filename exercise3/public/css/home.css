@@ -116,3 +116,99 @@
 
 }
 
+.draft-editor-wrapper {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: #0000004b;
+}
+.draft-editor {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  border-radius: 2px;
+  padding: 15px 20px;
+}
+.draft-editor-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+.close-icon {
+  background: #ccc;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+.draft-editor-content {
+  display: flex;
+  flex-direction: column;
+  margin: 0 50px;
+}
+.draft-editor-content label {
+  display: flex;
+}
+.draft-editor-content input[name="title"],
+.draft-editor-content input[name="tags"],
+.draft-editor-textarea {
+  font-family: 'Nunito', sans-serif;
+  display: flex;
+  flex: 1;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #f9f9f9;
+  color: #636b6f;
+  border: none;
+  border-radius: 2px;
+  outline: none;
+}
+.draft-editor-content input[name="title"] {
+  font-weight: 600;
+}
+.draft-editor-textarea {
+  resize: none;
+}
+.draft-editor-content input[name="tags"],
+.draft-editor-textarea {
+  font-weight: 400;
+}
+.draft-editor-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+.draft-editor-save-draft-btn,
+.draft-editor-save-post-btn {
+  padding: 5px 10px;
+  margin-left: 20px;
+  background: transparent;
+  border-radius: 2px;
+  color: white;
+  font-weight: unset;
+  display: flex;
+  align-self: center;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+.draft-editor-save-draft-btn {
+  background: #90CAF9;
+}
+.draft-editor-save-post-btn {
+  background: #81C784;
+}
