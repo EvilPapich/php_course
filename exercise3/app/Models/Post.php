@@ -9,8 +9,15 @@ class Post extends Model
 {
   use SoftDeletes;
 
+  protected $fillable = [
+    'title',
+    'text',
+    'author_id',
+    'status_id',
+  ];
+
   public function status() {
-    return $this->hasOne('App\Models\Status');
+    return $this->belongsTo('App\Models\Status');
   }
 
   public function tags() {
@@ -18,6 +25,6 @@ class Post extends Model
   }
 
   public function author() {
-    return $this->hasOne('App\Models\Author');
+    return $this->belongsTo('App\Models\Author');
   }
 }

@@ -10,10 +10,10 @@ class Author extends Model
     use SoftDeletes;
 
     public function posts() {
-      return $this->belongsToMany('App\Models\Post');
+      return $this->hasMany('App\Models\Post');
     }
 
     public function user() {
-      return $this->hasOne('App\Models\User');
+      return $this->belongsTo('App\Models\User');
     }
 }

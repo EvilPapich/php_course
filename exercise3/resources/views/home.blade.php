@@ -23,11 +23,12 @@
           <div class="h3">Главная</div>
         </div>
         <div class="home-header-info">
-          <div class="profile-info">
-            ${ author.lname } ${ author.fname }
+          <div class="profile-info" v-show="Object.keys(author).length">
+            author: <span>${ author.lname } ${ author.fname }</span>
           </div>
-          <div class="user-info">
-            ${ user.name } ${ user.email }
+          <div class="user-info" v-show="Object.keys(user).length">
+            login: <span>${ user.name }</span>
+            email: <span>${ user.email }</span>
           </div>
           <div
             class="home-header-exit h3"
@@ -36,60 +37,117 @@
         </div>
       </div>
       <div class="home-content">
-
+        <div class="home-content-wrapper">
+          <div class="home-write-post">
+            <div class="add-icon">+</div>
+            <div class="write-post-btn" v-on:click="writeDraft">Написать пост</div>
+          </div>
+          <div class="home-posts-list">
+            <div
+              v-for="(item, index) in posts"
+              key="index"
+              class="post-item"
+            >
+              ${ JSON.stringify(item) }
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 <script>
-  var app = new Vue({
+  const userIdHeader = 'x-user-id';
+
+  const app = new Vue({
     delimiters: ['${', '}'],
     el: "#app",
     data: {
       user: {},
       author: {},
+      draft: {title:"title",text:"text"},
+      myDrafts: [],
+      posts: [],
     },
     methods: {
       exitHandler() {
         localStorage.clear();
         window.location = '/';
+      },
+      //unused
+      fetchUser(userId) {
+        return fetch('api/user/get', {
+          method: 'GET',
+          headers: {
+            [userIdHeader]: userId,
+          },
+        }).then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
+      },
+      //
+      fetchAuthor(userId) {
+        return fetch('api/author/get', {
+          method: 'GET',
+          headers: {
+            [userIdHeader]: userId,
+          },
+        }).then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
+      },
+      writeDraft() {
+        fetch('api/post/write/draft', {
+          method: 'POST',
+          headers: {
+            [userIdHeader]: this.user.id
+          },
+          body: JSON.stringify({
+            authorId: this.author.id,
+            title: this.draft.title,
+            text: this.draft.text,
+          })
+        }).then(null);
+      },
+      getRecentPosts() {
+        return fetch('api/post/get/posts/recent', {
+          method: 'GET',
+          headers: {
+            [userIdHeader]: this.user.id
+          }
+        }).then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
       }
     },
     mounted() {
       const userId = localStorage.getItem('userId');
 
-      fetch('api/user/get', {
-        method: 'GET',
-        headers: {
-          'x-user-id': userId,
-        },
-      }).then((res) => {
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          throw new Error(res.statusText);
-        }
-      }).then((res) => {
-        this.user = res;
-      }).catch((err) => {
-        alert(err.message);
-      });
-
-      fetch('api/author/get', {
-        method: 'GET',
-        headers: {
-          'x-user-id': userId,
-        },
-      }).then((res) => {
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          throw new Error(res.statusText);
-        }
-      }).then((res) => {
-        this.author = res;
-      }).catch((err) => {
-        alert(err.message);
+      this.fetchAuthor(userId).then((author) => {
+        this.author = author;
+        this.user = author.user;
+      }).then(() => {
+        this.getRecentPosts().then((posts) => {
+          this.posts = posts
+        });
       });
     },
   });

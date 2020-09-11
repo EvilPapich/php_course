@@ -7,5 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Model
 {
-    use SoftDeletes;
+  use SoftDeletes;
+
+  public function author() {
+    return $this->hasOne('App\Models\Author');
+  }
 }

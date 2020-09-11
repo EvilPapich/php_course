@@ -9,7 +9,10 @@ class Status extends Model
 {
   use SoftDeletes;
 
+  const PUBLISHED = 1;
+  const DRAFT = 2;
+
   public function posts() {
-    return $this->belongsToMany('App\Models\Post');
+    return $this->hasMany('App\Models\Post');
   }
 }
