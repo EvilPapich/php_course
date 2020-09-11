@@ -189,7 +189,7 @@
           alert(err.message);
         });
       },
-      preparePostTags(tags) {
+      preparePostTags(tags="") {
         return tags.split(",").map(item => item.trim()).filter(item => item);
       },
       writeDraft() {
@@ -204,7 +204,15 @@
             text: this.draft.text,
             tags: this.preparePostTags(this.draft.tags),
           })
-        }).then(null);
+        }).then((res) => {
+          if (res.status === 200) {
+            //this.showDraftEditor = false;
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
       },
       writePost() {
         fetch('api/post/write/post', {
@@ -218,7 +226,20 @@
             text: this.draft.text,
             tags: this.preparePostTags(this.draft.tags),
           })
-        }).then(null);
+        }).then((res) => {
+          if (res.status === 200) {
+            this.showDraftEditor = false;
+            this.draft = {};
+            this.getRecentPosts().then((posts) => {
+              this.posts = posts;
+              this.isFetchingPosts = false;
+            });
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
       },
       getRecentPosts() {
         return fetch('api/post/get/posts/recent', {
