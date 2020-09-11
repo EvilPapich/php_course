@@ -148,6 +148,53 @@
       <div class="draft-list-header">
         <div class="circle-icon close-icon" v-on:click="showDraftList = false">x</div>
       </div>
+      <div class="drafts-list-title">
+        <div class="circle-icon drafts-count">
+          ${ isFetchingDrafts ? null : drafts.length }
+        </div>
+        <div class="drafts-btn">Ваши черновики</div>
+      </div>
+      <div class="draft-list-scroller">
+        <div
+          v-for="(draft, draftIndex) in drafts"
+          :key="draftIndex"
+          class="post-item"
+        >
+          <div class="post-item-header">
+            <div class="post-item-title">
+              ${ draft.title }
+            </div>
+            <div class="post-item-rating">
+
+            </div>
+          </div>
+          <div class="post-item-text">
+            ${ draft.text }
+          </div>
+          <div class="post-item-footer">
+            <div class="post-tags-list">
+              <div
+                v-for="(tag, tagIndex) in draft.tags"
+                :key="tagIndex"
+                class="tag-item"
+              >
+                ${ tag.name }
+              </div>
+            </div>
+            <div class="post-info">
+              <div class="draft-note">
+                <em>Черновик</em>
+              </div>
+              <div class="post-item-created-at">
+                ${ draft.created_at }
+              </div>
+              <div class="post-item-author">
+                ${ draft.author.lname } ${ draft.author.fname }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -161,7 +208,9 @@
       user: {},
       author: {},
       showDraftEditor: false,
-      draft: {},
+      draft: {
+        mode: undefined,
+      },
       isFetchingDrafts: true,
       showDraftList: false,
       drafts: [],

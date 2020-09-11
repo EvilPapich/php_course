@@ -53,7 +53,8 @@
 }
 
 .home-write-post,
-.home-drafts {
+.home-drafts,
+.drafts-list-title {
   display: flex;
   flex-direction: row;
   padding: 15px 20px;
@@ -262,4 +263,15 @@
 
 .draft-list {
   height: calc(100% - (15px*2) - (50px*2));
+}
+.draft-list-scroller {
+  overflow-y: auto;
+  max-width: 600px;
+  padding: 0 40px;
+}
+.drafts-list-title {
+  margin-bottom: 20px;
+}
+.draft-note {
+  margin-right: 15px;
 }
