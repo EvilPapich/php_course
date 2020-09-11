@@ -9,6 +9,8 @@ class User extends Model
 {
   use SoftDeletes;
 
+  const USER_ID_HEADER = 'x-user-id';
+
   public function author() {
     return $this->hasOne('App\Models\Author');
   }

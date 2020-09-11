@@ -21,6 +21,17 @@ class PostService
     );
   }
 
+  public static function getDrafts(Int $authorId) {
+    return collect(
+      Post::with(['status','author', 'tags'])
+        ->where([
+          ['author_id', '=', $authorId],
+          ['status_id', '=', Status::DRAFT],
+        ])
+        ->orderByDesc('updated_at')->get()
+    );
+  }
+
   public static function writeDraft(Int $authorId, String $title, String $text, ?Array $tags) {
     $post = Post::create([
       'author_id' => $authorId,
@@ -59,10 +70,36 @@ class PostService
     $post->save();
   }
 
-  public static function publishDraft(Int $postId) {
-    $post = Post::find($postId);
+  public static function publishDraft(Int $postId, Int $authorId) {
+    $post = Post::where([
+      ['post_id', '=', $postId],
+      ['author_id', '=', $authorId],
+      ['status_id', '=', Status::DRAFT],
+    ]);
 
     $post->status_id = Status::PUBLISHED;
+
+    $post->save();
+  }
+
+  public static function editDraft(Int $postId, Int $authorId, String $title, String $text, ?Array $tags) {
+    $post = Post::where([
+      ['post_id', $postId],
+      ['author_id', $authorId],
+    ])->firstOrFail()->get();
+
+    $post->title = $title;
+    $post->title = $text;
+
+    $post->save();
+
+    $dbTags = TagService::mergeTags($tags);
+
+    $post->tags()->detach();
+
+    foreach ($dbTags as $tag) {
+      $post->tags()->attach($tag['id']);
+    }
 
     $post->save();
   }

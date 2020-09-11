@@ -16,7 +16,10 @@
 <body>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <div id="app">
-  <div class="full-height">
+  <div
+    class="full-height"
+    :style="{overflow: (showDraftEditor || showDraftList) ? 'hidden' : 'unset'}"
+  >
     <div class="home-view">
       <div class="home-header">
         <div class="home-header-title">
@@ -39,8 +42,14 @@
       <div class="home-content">
         <div class="home-content-wrapper">
           <div class="home-write-post" v-on:click="showDraftEditor = true">
-            <div class="add-icon">+</div>
+            <div class="circle-icon add-icon">+</div>
             <div class="write-post-btn">Написать пост</div>
+          </div>
+          <div class="home-drafts" v-on:click="showDraftList = true">
+            <div class="circle-icon drafts-count">
+              ${ isFetchingDrafts ? null : drafts.length }
+            </div>
+            <div class="drafts-btn">Ваши черновики</div>
           </div>
           <div class="home-posts-list">
             <div>Посты за последние 7 дней:</div>
@@ -91,7 +100,7 @@
   <div v-show="showDraftEditor" class="draft-editor-wrapper">
     <div class="draft-editor">
       <div class="draft-editor-header">
-        <div class="close-icon" v-on:click="showDraftEditor = false">x</div>
+        <div class="circle-icon close-icon" v-on:click="showDraftEditor = false">x</div>
       </div>
       <div class="draft-editor-content">
         <label>
@@ -134,6 +143,13 @@
       </div>
     </div>
   </div>
+  <div v-show="showDraftList" class="draft-list-wrapper">
+    <div class="draft-list">
+      <div class="draft-list-header">
+        <div class="circle-icon close-icon" v-on:click="showDraftList = false">x</div>
+      </div>
+    </div>
+  </div>
 </div>
 <script>
   const userIdHeader = 'x-user-id';
@@ -146,7 +162,9 @@
       author: {},
       showDraftEditor: false,
       draft: {},
-      myDrafts: [],
+      isFetchingDrafts: true,
+      showDraftList: false,
+      drafts: [],
       isFetchingPosts: true,
       posts: [],
     },
@@ -199,14 +217,18 @@
             [userIdHeader]: this.user.id
           },
           body: JSON.stringify({
-            authorId: this.author.id,
             title: this.draft.title,
             text: this.draft.text,
             tags: this.preparePostTags(this.draft.tags),
           })
         }).then((res) => {
           if (res.status === 200) {
-            //this.showDraftEditor = false;
+            this.showDraftEditor = false;
+            this.draft = {};
+            this.getDrafts().then((drafts) => {
+              this.drafts = drafts;
+              this.isFetchingDrafts = false;
+            });
           } else {
             throw new Error(res.statusText);
           }
@@ -221,7 +243,6 @@
             [userIdHeader]: this.user.id
           },
           body: JSON.stringify({
-            authorId: this.author.id,
             title: this.draft.title,
             text: this.draft.text,
             tags: this.preparePostTags(this.draft.tags),
@@ -256,7 +277,23 @@
         }).catch((err) => {
           alert(err.message);
         });
-      }
+      },
+      getDrafts() {
+        return fetch('api/post/get/drafts', {
+          method: 'GET',
+          headers: {
+            [userIdHeader]: this.user.id
+          }
+        }).then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
+      },
     },
     mounted() {
       const userId = localStorage.getItem('userId');
@@ -265,6 +302,11 @@
         this.author = author;
         this.user = author.user;
       }).then(() => {
+        this.getDrafts().then((drafts) => {
+          this.drafts = drafts;
+          this.isFetchingDrafts = false;
+        });
+
         this.getRecentPosts().then((posts) => {
           this.posts = posts;
           this.isFetchingPosts = false;
