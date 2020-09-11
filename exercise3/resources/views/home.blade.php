@@ -43,12 +43,34 @@
             <div class="write-post-btn" v-on:click="writeDraft">Написать пост</div>
           </div>
           <div class="home-posts-list">
+            <div>Посты за последние 7 дней:</div>
             <div
               v-for="(item, index) in posts"
               key="index"
               class="post-item"
             >
-              ${ JSON.stringify(item) }
+              <div class="post-item-header">
+                <div class="post-item-title">
+                  ${ item.title }
+                </div>
+                <div class="post-item-rating">
+
+                </div>
+              </div>
+              <div class="post-item-text">
+                ${ item.text }
+              </div>
+              <div class="post-item-footer">
+                <div class="post-item-created-at">
+                  ${ item.created_at }
+                </div>
+                <div class="post-item-author">
+                  ${ item.author.lname } ${ item.author.fname }
+                </div>
+              </div>
+            </div>
+            <div v-if="!isFetchingPosts && !posts.length" class="post-list-empty-text">
+              <em>Отсутствуют</em>
             </div>
           </div>
         </div>
@@ -67,6 +89,7 @@
       author: {},
       draft: {title:"title",text:"text"},
       myDrafts: [],
+      isFetchingPosts: true,
       posts: [],
     },
     methods: {
@@ -146,7 +169,8 @@
         this.user = author.user;
       }).then(() => {
         this.getRecentPosts().then((posts) => {
-          this.posts = posts
+          this.posts = posts;
+          this.isFetchingPosts = false;
         });
       });
     },

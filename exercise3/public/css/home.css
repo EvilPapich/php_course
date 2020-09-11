@@ -73,9 +73,46 @@
 }
 
 .home-posts-list {
-
+  margin-top: 20px;
+  padding: 0 40px;
+}
+.post-list-empty-text {
+  margin-top: 20px;
+  color: #ccc;
 }
 .post-item {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  background: #f9f9f9;
+  border-radius: 2px;
+  padding: 15px 20px;
+}
+.post-item-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.post-item-title {
+  font-weight: 600;
+}
+.post-item-rating {
+
+}
+.post-item-text {
+  margin-bottom: 15px;
+}
+.post-item-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.post-item-created-at {
+  color: #ccc;
+  margin-right: 15px;
+}
+.post-item-author {
 
 }
 
