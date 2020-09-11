@@ -41,11 +41,11 @@
       </div>
       <div class="home-content">
         <div class="home-content-wrapper">
-          <div class="home-write-post" v-on:click="showDraftEditor = true">
+          <div class="home-write-post" v-on:click="clickNewPost">
             <div class="circle-icon add-icon">+</div>
             <div class="write-post-btn">Написать пост</div>
           </div>
-          <div class="home-drafts" v-on:click="showDraftList = true">
+          <div class="home-drafts" v-on:click="openDraftList">
             <div class="circle-icon drafts-count">
               ${ isFetchingDrafts ? null : drafts.length }
             </div>
@@ -100,7 +100,7 @@
   <div v-show="showDraftEditor" class="draft-editor-wrapper">
     <div class="draft-editor">
       <div class="draft-editor-header">
-        <div class="circle-icon close-icon" v-on:click="showDraftEditor = false">x</div>
+        <div class="circle-icon close-icon" v-on:click="closeDraftEditor">x</div>
       </div>
       <div class="draft-editor-content">
         <label>
@@ -129,16 +129,30 @@
           />
         </label>
       </div>
-      <div class="draft-editor-footer">
-        <div class="draft-editor-save-draft-btn"
-             v-on:click="writeDraft"
-        >
-          Сохранить как черновик
+      <div class="draft-editor-footer" :key="editor.mode">
+        <div v-if="!editor.mode || editor.mode === 'new'" class="draft-btns">
+          <div class="draft-editor-save-draft-btn"
+               v-on:click="writeDraft"
+          >
+            Сохранить как черновик
+          </div>
+          <div class="draft-editor-save-post-btn"
+               v-on:click="writePost"
+          >
+            Опубликовать
+          </div>
         </div>
-        <div class="draft-editor-save-post-btn"
-             v-on:click="writePost"
-        >
-          Опубликовать
+        <div v-else-if="editor.mode === 'edit'" class="draft-btns">
+          <div class="draft-editor-edit-draft-btn"
+               v-on:click="editDraft"
+          >
+            Обновить черновик
+          </div>
+          <div class="draft-editor-publish-post-btn"
+               v-on:click="publishDraft"
+          >
+            Опубликовать черновик
+          </div>
         </div>
       </div>
     </div>
@@ -146,7 +160,7 @@
   <div v-show="showDraftList" class="draft-list-wrapper">
     <div class="draft-list">
       <div class="draft-list-header">
-        <div class="circle-icon close-icon" v-on:click="showDraftList = false">x</div>
+        <div class="circle-icon close-icon" v-on:click="closeDraftList">x</div>
       </div>
       <div class="drafts-list-title">
         <div class="circle-icon drafts-count">
@@ -159,6 +173,7 @@
           v-for="(draft, draftIndex) in drafts"
           :key="draftIndex"
           class="post-item"
+          v-on:click="clickDraft(draft)"
         >
           <div class="post-item-header">
             <div class="post-item-title">
@@ -208,9 +223,8 @@
       user: {},
       author: {},
       showDraftEditor: false,
-      draft: {
-        mode: undefined,
-      },
+      draft: {},
+      editor: {},
       isFetchingDrafts: true,
       showDraftList: false,
       drafts: [],
@@ -255,6 +269,38 @@
         }).catch((err) => {
           alert(err.message);
         });
+      },
+      clickNewPost() {
+        this.editor.mode = "new";
+        this.openDraftEditor();
+      },
+      openDraftEditor(callback=()=>{}) {
+        this.showDraftEditor = true;
+        this.editor.callback = callback;
+      },
+      closeDraftEditor() {
+        this.showDraftEditor = false;
+        this.draft = {};
+        this.editor.mode = undefined;
+        this.editor.callback();
+      },
+      openDraftList() {
+        this.showDraftList = true;
+      },
+      clickDraft(draft) {
+        this.draft = {
+          ...draft,
+          tags: draft.tags.map(item => item.name).join(", ")
+        };
+        this.showDraftList = false;
+        this.editor.mode = "edit";
+        this.openDraftEditor(() => {
+          this.showDraftList = true;
+          this.editor.mode = undefined;
+        });
+      },
+      closeDraftList() {
+        this.showDraftList = false;
       },
       preparePostTags(tags="") {
         return tags.split(",").map(item => item.trim()).filter(item => item);
@@ -336,6 +382,62 @@
         }).then((res) => {
           if (res.status === 200) {
             return res.json();
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
+      },
+      editDraft() {
+        fetch("api/post/edit/draft", {
+          method: "POST",
+          headers: {
+            [userIdHeader]: this.user.id,
+          },
+          body: JSON.stringify({
+            postId: this.draft.id,
+            title: this.draft.title,
+            text: this.draft.text,
+            tags: this.preparePostTags(this.draft.tags),
+          }),
+        }).then((res) => {
+          if (res.status === 200) {
+            this.closeDraftEditor();
+            this.getDrafts().then((drafts) => {
+              this.drafts = drafts;
+              this.isFetchingDrafts = false;
+            });
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
+      },
+      publishDraft() {
+        fetch("api/post/publish/draft", {
+          method: "POST",
+          headers: {
+            [userIdHeader]: this.user.id,
+          },
+          body: JSON.stringify({
+            postId: this.draft.id,
+            title: this.draft.title,
+            text: this.draft.text,
+            tags: this.preparePostTags(this.draft.tags),
+          }),
+        }).then((res) => {
+          if (res.status === 200) {
+            this.closeDraftEditor();
+            this.getDrafts().then((drafts) => {
+              this.drafts = drafts;
+              this.isFetchingDrafts = false;
+            });
+            this.getRecentPosts().then((posts) => {
+              this.posts = posts;
+              this.isFetchingPosts = false;
+            });
           } else {
             throw new Error(res.statusText);
           }

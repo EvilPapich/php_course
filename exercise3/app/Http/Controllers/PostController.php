@@ -87,9 +87,23 @@ class PostController
 
     $body = $request->json();
 
-    $postId = $body->get('postId');
+    $validator = Validator::make($body->all(), [
+      'postId' => ['required'],
+      'title' => ['required'],
+      'text' => ['required'],
+      'tags.*' => ['distinct']
+    ]);
 
-    PostService::publishDraft($postId, $author->id);
+    if ($validator->fails()) {
+      abort(400, $validator->messages());
+    }
+
+    $postId = $body->get('postId');
+    $title = $body->get('title');
+    $text = $body->get('text');
+    $tags = $body->get('tags');
+
+    PostService::publishDraft($postId, $author->id, $title, $text, $tags);
 
     return json_encode([]);
   }

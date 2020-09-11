@@ -17,7 +17,7 @@ class PostService
           ['created_at', '>=', Carbon::now()->subDays(7)],
           ['status_id', '=', Status::PUBLISHED]
         ])
-        ->orderByDesc('created_at')->get()
+        ->orderByDesc('updated_at')->get()
     );
   }
 
@@ -70,26 +70,39 @@ class PostService
     $post->save();
   }
 
-  public static function publishDraft(Int $postId, Int $authorId) {
+  public static function publishDraft(Int $postId, Int $authorId, String $title, String $text, ?Array $tags) {
     $post = Post::where([
-      ['post_id', '=', $postId],
+      ['id', '=', $postId],
       ['author_id', '=', $authorId],
       ['status_id', '=', Status::DRAFT],
-    ]);
+    ])->firstOrFail();
 
+    $post->title = $title;
+    $post->text = $text;
     $post->status_id = Status::PUBLISHED;
+
+    $post->save();
+
+    $dbTags = TagService::mergeTags($tags);
+
+    $post->tags()->detach();
+
+    foreach ($dbTags as $tag) {
+      $post->tags()->attach($tag['id']);
+    }
 
     $post->save();
   }
 
   public static function editDraft(Int $postId, Int $authorId, String $title, String $text, ?Array $tags) {
     $post = Post::where([
-      ['post_id', $postId],
+      ['id', $postId],
       ['author_id', $authorId],
-    ])->firstOrFail()->get();
+    ])->firstOrFail();
 
     $post->title = $title;
-    $post->title = $text;
+    $post->text = $text;
+    $post->status_id = Status::DRAFT;
 
     $post->save();
 

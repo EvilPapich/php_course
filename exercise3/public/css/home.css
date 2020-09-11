@@ -240,8 +240,14 @@
   justify-content: flex-end;
   margin-top: 20px;
 }
+.draft-btns {
+  display: flex;
+  flex-direction: row;
+}
 .draft-editor-save-draft-btn,
-.draft-editor-save-post-btn {
+.draft-editor-save-post-btn,
+.draft-editor-edit-draft-btn,
+.draft-editor-publish-post-btn {
   padding: 5px 10px;
   margin-left: 20px;
   background: transparent;
@@ -254,10 +260,12 @@
   border: none;
   outline: none;
 }
-.draft-editor-save-draft-btn {
+.draft-editor-save-draft-btn,
+.draft-editor-edit-draft-btn{
   background: #90CAF9;
 }
-.draft-editor-save-post-btn {
+.draft-editor-save-post-btn,
+.draft-editor-publish-post-btn{
   background: #81C784;
 }
 
