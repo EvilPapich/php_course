@@ -80,8 +80,8 @@
                   </div>
                 </div>
                 <div class="post-info">
-                  <div class="post-item-created-at">
-                    ${ post.created_at }
+                  <div class="post-item-updated-at">
+                    ${ post.updated_at }
                   </div>
                   <div class="post-item-author">
                     ${ post.author.lname } ${ post.author.fname }
@@ -200,8 +200,8 @@
               <div class="draft-note">
                 <em>Черновик</em>
               </div>
-              <div class="post-item-created-at">
-                ${ draft.created_at }
+              <div class="post-item-updated-at">
+                ${ draft.updated_at }
               </div>
               <div class="post-item-author">
                 ${ draft.author.lname } ${ draft.author.fname }

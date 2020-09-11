@@ -154,11 +154,11 @@
 .post-item:hover > .post-item-footer > .post-tags-list > .tag-item {
   background: #eeeeee5c;
 }
-.post-item-created-at {
+.post-item-updated-at {
   color: #ccc;
   margin-right: 15px;
 }
-.post-item:hover > .post-item-footer > .post-info > .post-item-created-at {
+.post-item:hover > .post-item-footer > .post-info > .post-item-updated-at {
   color: #aaa;
 }
 .post-item-author {
