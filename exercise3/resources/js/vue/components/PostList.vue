@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="post-item-text">
-        {{ post.text }}
+        {{ overflowText(post.text, 512) }}
       </div>
       <div class="post-item-footer">
         <div class="post-tags-list">
@@ -59,6 +59,7 @@
 <script>
   import LikeIcon from "../icons/LikeIcon";
   import LikeCounter from "./LikeCounter";
+  import overflowText from "../utils/overflowText";
   export default {
     name: "PostList",
     components: {LikeCounter, LikeIcon},
@@ -68,6 +69,9 @@
         default: ()=>{},
         type: Function,
       }
+    },
+    methods: {
+      overflowText,
     }
   }
 </script>

@@ -208,6 +208,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "DraftEditorModal",
@@ -374,6 +383,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _icons_LikeIcon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../icons/LikeIcon */ "./resources/js/vue/icons/LikeIcon.vue");
 /* harmony import */ var _LikeCounter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LikeCounter */ "./resources/js/vue/components/LikeCounter.vue");
+/* harmony import */ var _utils_overflowText__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/overflowText */ "./resources/js/vue/utils/overflowText.js");
 //
 //
 //
@@ -432,6 +442,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -446,6 +457,9 @@ __webpack_require__.r(__webpack_exports__);
       "default": function _default() {},
       type: Function
     }
+  },
+  methods: {
+    overflowText: _utils_overflowText__WEBPACK_IMPORTED_MODULE_2__["default"]
   }
 });
 
@@ -1080,7 +1094,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.draft-editor[data-v-1dd28e41] {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  max-width: 600px;\n  background: white;\n  border-radius: 2px;\n  padding: 15px 20px;\n}\n.draft-editor-header[data-v-1dd28e41] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n  margin-bottom: 20px;\n}\n.draft-editor-content[data-v-1dd28e41] {\n  display: flex;\n  flex-direction: column;\n  margin: 0 50px;\n}\n.draft-editor-content label[data-v-1dd28e41] {\n  display: flex;\n}\n.draft-editor-content input[name=\"title\"][data-v-1dd28e41],\n.draft-editor-content input[name=\"tags\"][data-v-1dd28e41],\n.draft-editor-textarea[data-v-1dd28e41] {\n  font-family: 'Nunito', sans-serif;\n  display: flex;\n  flex: 1;\n  margin-bottom: 20px;\n  padding: 10px;\n  background: #f9f9f9;\n  color: #636b6f;\n  border: none;\n  border-radius: 2px;\n  outline: none;\n}\n.draft-editor-content input[name=\"title\"][data-v-1dd28e41] {\n  font-weight: 600;\n}\n.draft-editor-textarea[data-v-1dd28e41] {\n  resize: none;\n}\n.draft-editor-content input[name=\"tags\"][data-v-1dd28e41],\n.draft-editor-textarea[data-v-1dd28e41] {\n  font-weight: 400;\n}\n.draft-editor-footer[data-v-1dd28e41] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n  margin-top: 20px;\n}\n.draft-editor-btn-wrapper[data-v-1dd28e41] {\n  display: flex;\n  flex-direction: row;\n}\n.draft-editor-btn[data-v-1dd28e41] {\n  padding: 5px 10px;\n  margin-left: 20px;\n  background: transparent;\n  border-radius: 2px;\n  color: white;\n  font-weight: unset;\n  display: flex;\n  align-self: center;\n  cursor: pointer;\n  border: none;\n  outline: none;\n}\n", ""]);
+exports.push([module.i, "\n.draft-editor[data-v-1dd28e41] {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  max-width: 600px;\n  background: white;\n  border-radius: 2px;\n  padding: 15px 20px;\n}\n.draft-editor-header[data-v-1dd28e41] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n  margin-bottom: 20px;\n}\n.draft-editor-content[data-v-1dd28e41] {\n  display: flex;\n  flex-direction: column;\n  margin: 0 50px;\n}\n.draft-editor-input-wrapper[data-v-1dd28e41],\n.draft-editor-content > .draft-editor-input-wrapper > label[data-v-1dd28e41] {\n  display: flex;\n  flex-direction: column;\n}\n.draft-editor-textarea-wrapper[data-v-1dd28e41] {\n  background: #f9f9f9;\n  border-radius: 2px;\n  margin-bottom: 20px;\n}\n.post-text-counter[data-v-1dd28e41] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n  padding: 0 10px 5px 10px;\n  font-size: 13.3333px;\n  min-height: 18px;\n}\n.draft-editor-content input[name=\"title\"][data-v-1dd28e41],\n.draft-editor-content input[name=\"tags\"][data-v-1dd28e41],\n.draft-editor-textarea[data-v-1dd28e41] {\n  font-family: 'Nunito', sans-serif;\n  display: flex;\n  flex: 1;\n  padding: 10px;\n  background: #f9f9f9;\n  color: #636b6f;\n  border: none;\n  border-radius: 2px;\n  outline: none;\n}\n.draft-editor-content input[name=\"title\"][data-v-1dd28e41],\n.draft-editor-content input[name=\"tags\"][data-v-1dd28e41] {\n  margin-bottom: 20px;\n}\n.draft-editor-content input[name=\"title\"][data-v-1dd28e41] {\n  font-weight: 600;\n}\n.draft-editor-textarea[data-v-1dd28e41] {\n  resize: none;\n}\n.draft-editor-content input[name=\"tags\"][data-v-1dd28e41],\n.draft-editor-textarea[data-v-1dd28e41] {\n  font-weight: 400;\n}\n.draft-editor-footer[data-v-1dd28e41] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n  margin-top: 20px;\n}\n.draft-editor-btn-wrapper[data-v-1dd28e41] {\n  display: flex;\n  flex-direction: row;\n}\n.draft-editor-btn[data-v-1dd28e41] {\n  padding: 5px 10px;\n  margin-left: 20px;\n  background: transparent;\n  border-radius: 2px;\n  color: white;\n  font-weight: unset;\n  display: flex;\n  align-self: center;\n  cursor: pointer;\n  border: none;\n  outline: none;\n}\n", ""]);
 
 // exports
 
@@ -2678,86 +2692,107 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("div", { staticClass: "draft-editor-content" }, [
-      _c("label", [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.draft.title,
-              expression: "draft.title"
-            }
-          ],
-          attrs: {
-            name: "title",
-            type: "text",
-            placeholder: "Заголовок (обязательно)"
-          },
-          domProps: { value: _vm.draft.title },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+      _c("div", { staticClass: "draft-editor-input-wrapper" }, [
+        _c("label", [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.draft.title,
+                expression: "draft.title"
               }
-              _vm.$set(_vm.draft, "title", $event.target.value)
+            ],
+            attrs: {
+              name: "title",
+              type: "text",
+              placeholder: "Заголовок (обязательно)"
+            },
+            domProps: { value: _vm.draft.title },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.draft, "title", $event.target.value)
+              }
             }
-          }
-        })
+          })
+        ])
       ]),
       _vm._v(" "),
-      _c("label", [
-        _c("textarea", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.draft.text,
-              expression: "draft.text"
-            }
-          ],
-          staticClass: "draft-editor-textarea",
-          attrs: {
-            name: "text",
-            placeholder: "Текст (обязательно)",
-            rows: "5"
-          },
-          domProps: { value: _vm.draft.text },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+      _c(
+        "div",
+        {
+          staticClass:
+            "draft-editor-input-wrapper draft-editor-textarea-wrapper"
+        },
+        [
+          _c("label", [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.draft.text,
+                  expression: "draft.text"
+                }
+              ],
+              staticClass: "draft-editor-textarea",
+              attrs: {
+                name: "text",
+                placeholder: "Текст (обязательно)",
+                rows: "5"
+              },
+              domProps: { value: _vm.draft.text },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.draft, "text", $event.target.value)
+                }
               }
-              _vm.$set(_vm.draft, "text", $event.target.value)
-            }
-          }
-        })
-      ]),
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "post-text-counter" }, [
+            _vm._v(
+              "\n        " +
+                _vm._s(_vm.draft.text ? _vm.draft.text.length : null) +
+                "\n      "
+            )
+          ])
+        ]
+      ),
       _vm._v(" "),
-      _c("label", [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.draft.tags,
-              expression: "draft.tags"
-            }
-          ],
-          attrs: {
-            name: "tags",
-            type: "text",
-            placeholder: "Введите теги через запятую (не обязательно)"
-          },
-          domProps: { value: _vm.draft.tags },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+      _c("div", { staticClass: "draft-editor-input-wrapper" }, [
+        _c("label", [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.draft.tags,
+                expression: "draft.tags"
               }
-              _vm.$set(_vm.draft, "tags", $event.target.value)
+            ],
+            attrs: {
+              name: "tags",
+              type: "text",
+              placeholder: "Введите теги через запятую (не обязательно)"
+            },
+            domProps: { value: _vm.draft.tags },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.draft, "tags", $event.target.value)
+              }
             }
-          }
-        })
+          })
+        ])
       ])
     ]),
     _vm._v(" "),
@@ -3016,7 +3051,9 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "post-item-text" }, [
-            _vm._v("\n      " + _vm._s(post.text) + "\n    ")
+            _vm._v(
+              "\n      " + _vm._s(_vm.overflowText(post.text, 512)) + "\n    "
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "post-item-footer" }, [
@@ -16484,6 +16521,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalLayout_vue_vue_type_template_id_6832cd0c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/vue/utils/overflowText.js":
+/*!************************************************!*\
+  !*** ./resources/js/vue/utils/overflowText.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var overflowText = function overflowText(text, limit) {
+  var ellipsisChars = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "...";
+
+  if (limit && Number(limit)) {
+    if (text.length > limit) {
+      return "".concat(text.substr(0, limit)).concat(ellipsisChars);
+    } else {
+      return text;
+    }
+  } else {
+    console.warn("invalid limit: ".concat(limit));
+    return text;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (overflowText);
 
 /***/ }),
 

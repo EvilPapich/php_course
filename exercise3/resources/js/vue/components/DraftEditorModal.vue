@@ -7,31 +7,40 @@
       />
     </div>
     <div class="draft-editor-content">
-      <label>
-        <input
-            name="title"
-            type="text"
-            v-model="draft.title"
-            placeholder="Заголовок (обязательно)"
-        />
-      </label>
-      <label>
-            <textarea
-                class="draft-editor-textarea"
-                name="text"
-                v-model="draft.text"
-                placeholder="Текст (обязательно)"
-                rows="5"
-            ></textarea>
-      </label>
-      <label>
-        <input
-            name="tags"
-            type="text"
-            v-model="draft.tags"
-            placeholder="Введите теги через запятую (не обязательно)"
-        />
-      </label>
+      <div class="draft-editor-input-wrapper">
+        <label>
+          <input
+              name="title"
+              type="text"
+              v-model="draft.title"
+              placeholder="Заголовок (обязательно)"
+          />
+        </label>
+      </div>
+      <div class="draft-editor-input-wrapper draft-editor-textarea-wrapper">
+        <label>
+          <textarea
+              class="draft-editor-textarea"
+              name="text"
+              v-model="draft.text"
+              placeholder="Текст (обязательно)"
+              rows="5"
+          ></textarea>
+        </label>
+        <div class="post-text-counter">
+          {{ draft.text ? draft.text.length : null }}
+        </div>
+      </div>
+      <div class="draft-editor-input-wrapper">
+        <label>
+          <input
+              name="tags"
+              type="text"
+              v-model="draft.tags"
+              placeholder="Введите теги через запятую (не обязательно)"
+          />
+        </label>
+      </div>
     </div>
     <div class="draft-editor-footer">
       <div class="draft-editor-btn-wrapper">
@@ -86,8 +95,23 @@
     flex-direction: column;
     margin: 0 50px;
   }
-  .draft-editor-content label {
+  .draft-editor-input-wrapper,
+  .draft-editor-content > .draft-editor-input-wrapper > label {
     display: flex;
+    flex-direction: column;
+  }
+  .draft-editor-textarea-wrapper {
+    background: #f9f9f9;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .post-text-counter {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 0 10px 5px 10px;
+    font-size: 13.3333px;
+    min-height: 18px;
   }
   .draft-editor-content input[name="title"],
   .draft-editor-content input[name="tags"],
@@ -95,13 +119,16 @@
     font-family: 'Nunito', sans-serif;
     display: flex;
     flex: 1;
-    margin-bottom: 20px;
     padding: 10px;
     background: #f9f9f9;
     color: #636b6f;
     border: none;
     border-radius: 2px;
     outline: none;
+  }
+  .draft-editor-content input[name="title"],
+  .draft-editor-content input[name="tags"] {
+    margin-bottom: 20px;
   }
   .draft-editor-content input[name="title"] {
     font-weight: 600;
