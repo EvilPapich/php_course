@@ -1142,7 +1142,7 @@ var userIdHeader = 'x-user-id';
         method: 'POST',
         headers: _defineProperty({}, userIdHeader, this.user.id),
         body: JSON.stringify({
-          filters: [[]],
+          //filters: [[]],
           orders: Object.entries(this.orders).reduce(function (result, _ref) {
             var _ref2 = _slicedToArray(_ref, 2),
                 key = _ref2[0],

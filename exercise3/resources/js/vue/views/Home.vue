@@ -353,7 +353,7 @@
             [userIdHeader]: this.user.id
           },
           body: JSON.stringify({
-            filters: [[]],
+            //filters: [[]],
             orders: Object.entries(this.orders).reduce((result, [key, value]) => {
               const orderDict = {
                 0: undefined,

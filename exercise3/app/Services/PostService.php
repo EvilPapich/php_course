@@ -31,7 +31,7 @@ class PostService
   }
 
   public static function getRecentPostsWithParams(
-    Array $filters = [[]],
+    ?Array $filters = [[]],
     Array $orders = ['updated_at' => 'desc'],
     Array $tags = []
   ) {
@@ -45,10 +45,8 @@ class PostService
         },
       ])
       ->where([
-        array_merge($filters, [
           ['updated_at', '>=', Carbon::now()->subDays(7)],
           ['status_id', '=', Status::PUBLISHED]
-        ])
       ]);
 
     foreach ($tags as $index => $tag) {
