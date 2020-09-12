@@ -8,6 +8,7 @@
         :action="() => action(post)"
         :likeAction="likeAction"
         :dislikeAction="dislikeAction"
+        :tagAction="tagAction"
     />
   </div>
 </template>
@@ -26,6 +27,7 @@
       action: Function,
       likeAction: Function,
       dislikeAction: Function,
+      tagAction: Function,
     },
     methods: {
       overflowText,

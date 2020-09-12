@@ -65,6 +65,17 @@
                   <RefreshIcon :color="'#636b6f'"/>
                 </div>
               </div>
+              <div v-if="tags.length" class="home-tags-navigator">
+                <div
+                    v-for="(tag, index) in tags"
+                    :key="index"
+                    class="navigator-tag-item"
+                    v-on:click="() => clickTagNavigatorItem(tag)"
+                >
+                  {{tag.name}}
+                  <span>x</span>
+                </div>
+              </div>
               <div>Посты за последние 7 дней:</div>
               <PostList
                   v-if="!isFetchingPosts"
@@ -73,6 +84,7 @@
                   :action="(item) => openPostView(item)"
                   :likeAction="(item) => ratePost(item.id, 1)"
                   :dislikeAction="(item) => ratePost(item.id, 0)"
+                  :tagAction="(item) => clickTag(item)"
               />
               <div v-else class="post-list-loading">
                 <em>Загрузка...</em>
@@ -152,6 +164,7 @@
   import DraftListModal from "../components/DraftListModal";
   import PostViewModal from "../components/PostViewModal";
   import RefreshIcon from "../icons/RefreshIcon";
+  import * as _ from "lodash";
   Vue.use(Fragment.Plugin);
 
   const userIdHeader = 'x-user-id';
@@ -192,6 +205,7 @@
             count: 0,
           },
         },
+        tags: [],
       };
     },
     computed: {
@@ -351,6 +365,7 @@
 
               return result;
             },{}),
+            tags: this.tags.map(item => item.id),
           })
         }).then((res) => {
           if (res.status === 200) {
@@ -502,6 +517,13 @@
           this.isFetchingPosts = false;
         });
       },
+      clickTag(tag) {
+        this.tags.push(tag);
+        this.tags = _.uniqBy(this.tags, "id");
+      },
+      clickTagNavigatorItem(tag) {
+        this.tags = this.tags.filter(item => item.id !== tag.id);
+      },
     },
     mounted() {
       const userId = localStorage.getItem('userId');
@@ -605,6 +627,7 @@
   }
   .home-posts-list-filters-wrapper > .sort {
     user-select: none;
+    cursor: pointer;
   }
   .home-posts-list-filters-wrapper > .sort::after {
     content: '';
@@ -623,7 +646,6 @@
   }
   .home-posts-list-filters-wrapper > .sort:hover {
     color: #4c7dff;
-    cursor: pointer;
   }
   .home-posts-list-refresh {
     display: flex;
@@ -634,5 +656,36 @@
     background: #f9f9f9;
     border-radius: 2px;
     cursor: pointer;
+  }
+  .home-posts-list-refresh:hover {
+    background: #cad9ff;
+  }
+
+  .home-tags-navigator {
+    display: flex;
+    flex-direction: row;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    background: #f9f9f9;
+    border-radius: 2px;
+  }
+  .navigator-tag-item {
+    display: flex;
+    align-self: flex-start;
+    padding: 2px 8px;
+    border-radius: 24px;
+    background: #eee;
+    font-size: 12px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  .navigator-tag-item:hover {
+    background: #4c7dff;
+  }
+  .navigator-tag-item > span {
+    margin-left: 5px;
+  }
+  .navigator-tag-item:hover > span {
+    color: white;
   }
 </style>

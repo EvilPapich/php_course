@@ -23,8 +23,9 @@ class PostController
 
     $filters = $body->get('filters');
     $orders = $body->get('orders');
+    $tags = $body->get('tags');
 
-    $posts = PostService::getRecentPostsWithParams($filters, $orders);
+    $posts = PostService::getRecentPostsWithParams($filters, $orders, $tags);
 
     return json_encode($posts);
   }

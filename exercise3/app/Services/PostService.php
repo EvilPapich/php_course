@@ -30,7 +30,11 @@ class PostService
     );
   }
 
-  public static function getRecentPostsWithParams(Array $filters = [[]], Array $orders = ['updated_at' => 'desc']) {
+  public static function getRecentPostsWithParams(
+    Array $filters = [[]],
+    Array $orders = ['updated_at' => 'desc'],
+    Array $tags = []
+  ) {
     $result = Post::with(['status','author','tags'])
       ->withCount([
         'opinions as likes' => function (Builder $query) {
@@ -46,6 +50,14 @@ class PostService
           ['status_id', '=', Status::PUBLISHED]
         ])
       ]);
+
+    foreach ($tags as $index => $tag) {
+      $whereClause = ($index===0 ? "whereHas" : "orWhereHas");
+
+      $result = $result->$whereClause('tags', function(Builder $query) use ($tag) {
+        $query->where('tag_id', '=', $tag);
+      });
+    }
 
     foreach ($orders as $column => $order) {
       $result = $result->orderBy($column, $order);

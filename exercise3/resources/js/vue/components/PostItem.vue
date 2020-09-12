@@ -37,6 +37,10 @@
             v-for="(tag, tagIndex) in post.tags"
             :key="tagIndex"
             class="tag-item"
+            v-on:click="($event) => {
+              $event.stopPropagation();
+              tagAction(tag);
+            }"
         >
           {{ tag.name }}
         </div>
@@ -74,6 +78,10 @@
         type: Function,
       },
       dislikeAction: {
+        default: ()=>{},
+        type: Function,
+      },
+      tagAction: {
         default: ()=>{},
         type: Function,
       },
@@ -146,6 +154,11 @@
   }
   .post-item:hover > .post-item-footer > .post-tags-list > .tag-item {
     background: #eeeeee5c;
+  }
+  .tag-item:hover,
+  .post-item:hover > .post-item-footer > .post-tags-list > .tag-item:hover {
+    background: #4c7dff;
+    color: white;
   }
   .post-item-status {
     margin-right: 15px;
