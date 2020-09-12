@@ -18,6 +18,17 @@ class PostController
     return json_encode($posts);
   }
 
+  public function getRecentPostsWithParams(Request $request) {
+    $body = $request->json();
+
+    $filters = $body->get('filters');
+    $orders = $body->get('orders');
+
+    $posts = PostService::getRecentPostsWithParams($filters, $orders);
+
+    return json_encode($posts);
+  }
+
   public function getDrafts(Request $request) {
     $userId = $request->header(User::USER_ID_HEADER);
 

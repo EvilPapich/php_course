@@ -1,7 +1,7 @@
 <template>
   <svg
-      height="16"
-      width="16"
+      :height="size"
+      :width="size"
       viewBox="0 0 16 16"
       xmlns="http://www.w3.org/2000/svg"
   >
@@ -21,6 +21,10 @@
     name: "LikeIcon",
     props: {
       color: String,
+      size: {
+        default: 16,
+        type: Number,
+      }
     }
   }
 </script>

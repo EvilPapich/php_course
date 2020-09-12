@@ -32,6 +32,7 @@ Route::middleware('app.auth')->group(function () {
 
   Route::group(['prefix' => 'post'], function () {
     Route::get('/get/posts/recent', 'PostController@getRecentPosts');
+    Route::post('/get/posts/recent', 'PostController@getRecentPostsWithParams');
     Route::get('/get/drafts', 'PostController@getDrafts');
     Route::post('/write/draft', 'PostController@writeDraft');
     Route::post('/write/post', 'PostController@writePost');

@@ -48,14 +48,35 @@
               </template>
             </WideButton>
             <div class="home-posts-list">
+              <div class="home-posts-list-controls-wrapper">
+                <div class="home-posts-list-filters-wrapper">
+                  <div>Сортировка:</div>
+                  <div
+                      v-for="(order, key, index) in orders"
+                      :key="index"
+                      :class="['sort', {'sort-asc': order.count === 1, 'sort-desc': order.count === 2}]"
+                      v-on:click="() => postOrderChange(key)"
+                  >{{order.title}}</div>
+                </div>
+                <div
+                    class="home-posts-list-refresh"
+                    v-on:click="refreshPostList"
+                >
+                  <RefreshIcon :color="'#636b6f'"/>
+                </div>
+              </div>
               <div>Посты за последние 7 дней:</div>
               <PostList
+                  v-if="!isFetchingPosts"
                   :posts="posts"
                   :needOverflowText="true"
                   :action="(item) => openPostView(item)"
                   :likeAction="(item) => ratePost(item.id, 1)"
                   :dislikeAction="(item) => ratePost(item.id, 0)"
               />
+              <div v-else class="post-list-loading">
+                <em>Загрузка...</em>
+              </div>
               <div v-if="!isFetchingPosts && !posts.length" class="post-list-empty-text">
                 <em>Отсутствуют</em>
               </div>
@@ -130,6 +151,7 @@
   import WideButton from "../components/WideButton";
   import DraftListModal from "../components/DraftListModal";
   import PostViewModal from "../components/PostViewModal";
+  import RefreshIcon from "../icons/RefreshIcon";
   Vue.use(Fragment.Plugin);
 
   const userIdHeader = 'x-user-id';
@@ -137,6 +159,7 @@
   export default {
     name: "Home",
     components: {
+      RefreshIcon,
       PostViewModal,
       DraftListModal,
       WideButton,
@@ -159,6 +182,16 @@
         posts: [],
         viewedPostId: undefined,
         showPostView: false,
+        orders: {
+          "updated_at": {
+            title: "по дате",
+            count: 2,
+          },
+          "likes": {
+            title: "по рейтингу",
+            count: 0,
+          },
+        },
       };
     },
     computed: {
@@ -284,11 +317,41 @@
         });
       },
       getRecentPosts() {
+        /*
         return fetch('api/post/get/posts/recent', {
           method: 'GET',
           headers: {
             [userIdHeader]: this.user.id
           }
+        }).then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
+        */
+        return fetch('api/post/get/posts/recent', {
+          method: 'POST',
+          headers: {
+            [userIdHeader]: this.user.id
+          },
+          body: JSON.stringify({
+            filters: [[]],
+            orders: Object.entries(this.orders).reduce((result, [key, value]) => {
+              const orderDict = {
+                0: undefined,
+                1: 'asc',
+                2: 'desc',
+              };
+
+              result[key] = orderDict[value.count];
+
+              return result;
+            },{}),
+          })
         }).then((res) => {
           if (res.status === 200) {
             return res.json();
@@ -425,6 +488,20 @@
           alert(err.message);
         });
       },
+      postOrderChange(key) {
+        this.orders[key].count = {
+          0: 1,
+          1: 2,
+          2: 0,
+        }[this.orders[key].count];
+      },
+      refreshPostList() {
+        this.isFetchingPosts = true;
+        this.getRecentPosts().then((posts) => {
+          this.posts = posts;
+          this.isFetchingPosts = false;
+        });
+      },
     },
     mounted() {
       const userId = localStorage.getItem('userId');
@@ -505,5 +582,57 @@
   .post-list-empty-text {
     margin-top: 20px;
     color: #ccc;
+  }
+  .post-list-loading {
+    margin-top: 20px;
+  }
+
+  .home-posts-list-controls-wrapper {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+  }
+
+  .home-posts-list-filters-wrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px 20px;
+    margin-right: 10px;
+    background: #f9f9f9;
+    border-radius: 2px;
+  }
+  .home-posts-list-filters-wrapper > .sort {
+    user-select: none;
+  }
+  .home-posts-list-filters-wrapper > .sort::after {
+    content: '';
+    font-size: 12px;
+    margin-left: 17px;
+  }
+  .home-posts-list-filters-wrapper > .sort-asc::after {
+    content: '▲';
+    font-size: 12px;
+    margin-left: 5px;
+  }
+  .home-posts-list-filters-wrapper > .sort-desc::after {
+    content: '▼';
+    font-size: 12px;
+    margin-left: 5px;
+  }
+  .home-posts-list-filters-wrapper > .sort:hover {
+    color: #4c7dff;
+    cursor: pointer;
+  }
+  .home-posts-list-refresh {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 52px;
+    height: 52px;
+    background: #f9f9f9;
+    border-radius: 2px;
+    cursor: pointer;
   }
 </style>

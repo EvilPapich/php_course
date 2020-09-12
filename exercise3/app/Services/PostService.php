@@ -23,11 +23,37 @@ class PostService
           },
         ])
         ->where([
-          ['created_at', '>=', Carbon::now()->subDays(7)],
+          ['updated_at', '>=', Carbon::now()->subDays(7)],
           ['status_id', '=', Status::PUBLISHED]
         ])
         ->orderByDesc('updated_at')->get()
     );
+  }
+
+  public static function getRecentPostsWithParams(Array $filters = [[]], Array $orders = ['updated_at' => 'desc']) {
+    $result = Post::with(['status','author','tags'])
+      ->withCount([
+        'opinions as likes' => function (Builder $query) {
+          $query->where('value', '=', 1);
+        },
+        'opinions as dislikes' => function (Builder $query) {
+          $query->where('value', '=', 0);
+        },
+      ])
+      ->where([
+        array_merge($filters, [
+          ['updated_at', '>=', Carbon::now()->subDays(7)],
+          ['status_id', '=', Status::PUBLISHED]
+        ])
+      ]);
+
+    foreach ($orders as $column => $order) {
+      $result = $result->orderBy($column, $order);
+    }
+
+    $result = $result->get();
+
+    return collect($result);
   }
 
   public static function getDrafts(Int $authorId) {
