@@ -440,8 +440,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -1151,7 +1149,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.posts-list[data-v-4fa73940] {\n}\n.post-item[data-v-4fa73940] {\n  display: flex;\n  flex-direction: column;\n  margin-top: 20px;\n  background: #f9f9f9;\n  border-radius: 2px;\n  padding: 15px 20px;\n}\n.post-item[data-v-4fa73940]:hover {\n  background: #cad9ff;\n  cursor: pointer;\n}\n.post-item-header[data-v-4fa73940] {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  margin-bottom: 15px;\n}\n.post-item-title[data-v-4fa73940] {\n  font-weight: 600;\n}\n.post-item-rating[data-v-4fa73940] {\n  display: flex;\n  flex-direction: row;\n}\n.post-item-text[data-v-4fa73940] {\n  margin-bottom: 15px;\n}\n.post-item-footer[data-v-4fa73940] {\n  display: flex;\n  flex-direction: column;\n}\n.post-info[data-v-4fa73940],\n.post-tags-list[data-v-4fa73940]\n{\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n}\n.post-tags-list[data-v-4fa73940] {\n  margin-bottom: 5px;\n}\n.tag-item[data-v-4fa73940] {\n  display: flex;\n  align-self: flex-start;\n  padding: 2px 8px;\n  border-radius: 24px;\n  background: #eee;\n  font-size: 12px;\n  margin-left: 10px;\n}\n.post-item:hover > .post-item-footer > .post-tags-list > .tag-item[data-v-4fa73940] {\n  background: #eeeeee5c;\n}\n.post-item-status[data-v-4fa73940] {\n  margin-right: 15px;\n}\n.post-item-updated-at[data-v-4fa73940] {\n  color: #ccc;\n  margin-right: 15px;\n}\n.post-item:hover > .post-item-footer > .post-info > .post-item-updated-at[data-v-4fa73940] {\n  color: #aaa;\n}\n.post-item-author[data-v-4fa73940] {\n}\n", ""]);
+exports.push([module.i, "\n.posts-list[data-v-4fa73940] {\n}\n.post-item[data-v-4fa73940] {\n  display: flex;\n  flex-direction: column;\n  margin-top: 20px;\n  background: #f9f9f9;\n  border-radius: 2px;\n  padding: 15px 20px;\n}\n.post-item[data-v-4fa73940]:hover {\n  background: #cad9ff;\n  cursor: pointer;\n}\n.post-item-header[data-v-4fa73940] {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  margin-bottom: 15px;\n}\n.post-item-title[data-v-4fa73940] {\n  font-weight: 600;\n}\n.post-item-rating[data-v-4fa73940] {\n  display: flex;\n  flex-direction: row;\n}\n.post-item-text[data-v-4fa73940] {\n  margin-bottom: 15px;\n  white-space: pre-wrap;\n}\n.post-item-footer[data-v-4fa73940] {\n  display: flex;\n  flex-direction: column;\n}\n.post-info[data-v-4fa73940],\n.post-tags-list[data-v-4fa73940]\n{\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n}\n.post-tags-list[data-v-4fa73940] {\n  margin-bottom: 5px;\n}\n.tag-item[data-v-4fa73940] {\n  display: flex;\n  align-self: flex-start;\n  padding: 2px 8px;\n  border-radius: 24px;\n  background: #eee;\n  font-size: 12px;\n  margin-left: 10px;\n}\n.post-item:hover > .post-item-footer > .post-tags-list > .tag-item[data-v-4fa73940] {\n  background: #eeeeee5c;\n}\n.post-item-status[data-v-4fa73940] {\n  margin-right: 15px;\n}\n.post-item-updated-at[data-v-4fa73940] {\n  color: #ccc;\n  margin-right: 15px;\n}\n.post-item:hover > .post-item-footer > .post-info > .post-item-updated-at[data-v-4fa73940] {\n  color: #aaa;\n}\n.post-item-author[data-v-4fa73940] {\n}\n", ""]);
 
 // exports
 
@@ -2742,7 +2740,7 @@ var render = function() {
               attrs: {
                 name: "text",
                 placeholder: "Текст (обязательно)",
-                rows: "5"
+                rows: "10"
               },
               domProps: { value: _vm.draft.text },
               on: {
@@ -3051,9 +3049,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "post-item-text" }, [
-            _vm._v(
-              "\n      " + _vm._s(_vm.overflowText(post.text, 512)) + "\n    "
-            )
+            _vm._v(_vm._s(_vm.overflowText(post.text, 512)))
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "post-item-footer" }, [

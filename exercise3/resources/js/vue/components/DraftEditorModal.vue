@@ -24,7 +24,7 @@
               name="text"
               v-model="draft.text"
               placeholder="Текст (обязательно)"
-              rows="5"
+              rows="10"
           ></textarea>
         </label>
         <div class="post-text-counter">

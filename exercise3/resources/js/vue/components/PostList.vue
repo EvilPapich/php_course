@@ -27,9 +27,7 @@
           />
         </div>
       </div>
-      <div class="post-item-text">
-        {{ overflowText(post.text, 512) }}
-      </div>
+      <div class="post-item-text">{{overflowText(post.text, 512)}}</div>
       <div class="post-item-footer">
         <div class="post-tags-list">
           <div
@@ -107,6 +105,7 @@
   }
   .post-item-text {
     margin-bottom: 15px;
+    white-space: pre-wrap;
   }
   .post-item-footer {
     display: flex;
