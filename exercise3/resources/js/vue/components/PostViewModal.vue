@@ -6,17 +6,33 @@
           :action="closePostView"
       />
     </div>
+    <div class="post-view-content" :style="{flex: 1}">
+      <PostItem
+          :post="post"
+          :needOverflowText="false"
+          :likeAction="likeAction"
+          :dislikeAction="dislikeAction"
+          :styles="{
+            postItem: {flex: 1},
+            postItemText: {flex: 1},
+            hover: false,
+          }"
+      />
+    </div>
   </div>
 </template>
 
 <script>
   import CloseButton from "./CloseButton";
+  import PostItem from "./PostItem";
   export default {
     name: "PostViewModal",
-    components: {CloseButton},
+    components: {PostItem, CloseButton},
     props: {
       post: Object,
-      closePostView: Function
+      closePostView: Function,
+      likeAction: Function,
+      dislikeAction: Function,
     }
   }
 </script>
@@ -37,5 +53,9 @@
     flex-direction: row;
     justify-content: flex-end;
     margin-bottom: 20px;
+  }
+  .post-view-content {
+    display: flex;
+    flex-direction: column;
   }
 </style>

@@ -51,7 +51,8 @@
               <div>Посты за последние 7 дней:</div>
               <PostList
                   :posts="posts"
-                  :action="openPostView"
+                  :needOverflowText="true"
+                  :action="(item) => openPostView(item)"
                   :likeAction="(item) => ratePost(item.id, 1)"
                   :dislikeAction="(item) => ratePost(item.id, 0)"
               />
@@ -112,6 +113,8 @@
       <PostViewModal
           :post="post"
           :closePostView="closePostView"
+          :likeAction="(item) => ratePost(item.id, 1)"
+          :dislikeAction="(item) => ratePost(item.id, 0)"
       />
     </ModalLayout>
   </fragment>
@@ -404,11 +407,13 @@
           alert(err.message);
         });
       },
-      openPostView() {
+      openPostView(post) {
         this.showPostView = true;
+        this.post = post;
       },
       closePostView() {
         this.showPostView = false;
+        this.post = {};
       },
       ratePost(postId, value) {
         fetch("api/post/rate/post", {

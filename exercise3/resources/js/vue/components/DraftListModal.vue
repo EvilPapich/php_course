@@ -20,6 +20,7 @@
     <div class="draft-list-scroller">
       <PostList
           :posts="drafts"
+          :needOverflowText="true"
           :action="draftClick"
       />
     </div>
