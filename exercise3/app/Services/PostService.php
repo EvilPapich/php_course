@@ -98,11 +98,11 @@ class PostService
     $post = Post::where([
       ['id', $postId],
       ['author_id', $authorId],
+      ['status_id', '=', Status::DRAFT],
     ])->firstOrFail();
 
     $post->title = $title;
     $post->text = $text;
-    $post->status_id = Status::DRAFT;
 
     $post->save();
 
@@ -113,6 +113,18 @@ class PostService
     foreach ($dbTags as $tag) {
       $post->tags()->attach($tag['id']);
     }
+
+    $post->save();
+  }
+
+  public static function deleteDraft(Int $postId, Int $authorId) {
+    $post = Post::where([
+      ['id', $postId],
+      ['author_id', $authorId],
+      ['status_id', '=', Status::DRAFT],
+    ])->firstOrFail();
+
+    $post->delete();
 
     $post->save();
   }

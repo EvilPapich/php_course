@@ -135,4 +135,26 @@ class PostController
 
     return json_encode([]);
   }
+
+  public function deleteDraft(Request $request) {
+    $userId = $request->header(User::USER_ID_HEADER);
+
+    $author = AuthorService::getAuthorByUserId($userId);
+
+    $body = $request->json();
+
+    $validator = Validator::make($body->all(), [
+      'postId' => ['required'],
+    ]);
+
+    if ($validator->fails()) {
+      abort(400, $validator->messages());
+    }
+
+    $postId = $body->get('postId');
+
+    PostService::deleteDraft($postId, $author->id);
+
+    return json_encode([]);
+  }
 }

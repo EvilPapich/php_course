@@ -536,6 +536,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -789,24 +794,48 @@ var userIdHeader = 'x-user-id';
       })["catch"](function (err) {
         alert(err.message);
       });
+    },
+    deleteDraft: function deleteDraft() {
+      var _this6 = this;
+
+      fetch("api/post/delete/draft", {
+        method: "POST",
+        headers: _defineProperty({}, userIdHeader, this.user.id),
+        body: JSON.stringify({
+          postId: this.draft.id
+        })
+      }).then(function (res) {
+        if (res.status === 200) {
+          _this6.closeDraftEditor();
+
+          _this6.getDrafts().then(function (drafts) {
+            _this6.drafts = drafts;
+            _this6.isFetchingDrafts = false;
+          });
+        } else {
+          throw new Error(res.statusText);
+        }
+      })["catch"](function (err) {
+        alert(err.message);
+      });
     }
   },
   mounted: function mounted() {
-    var _this6 = this;
+    var _this7 = this;
 
     var userId = localStorage.getItem('userId');
     this.fetchAuthor(userId).then(function (author) {
-      _this6.author = author;
-      _this6.user = author.user;
+      _this7.author = author;
+      _this7.user = author.user;
     }).then(function () {
-      _this6.getDrafts().then(function (drafts) {
-        _this6.drafts = drafts;
-        _this6.isFetchingDrafts = false;
+      _this7.getDrafts().then(function (drafts) {
+        _this7.drafts = drafts;
+        _this7.isFetchingDrafts = false;
       });
 
-      _this6.getRecentPosts().then(function (posts) {
-        _this6.posts = posts;
-        _this6.isFetchingPosts = false;
+      _this7.getRecentPosts().then(function (posts) {
+        _this7.posts = posts;
+        _this7.isFetchingPosts = false;
       });
     });
   }
@@ -2922,6 +2951,11 @@ var render = function() {
                   }
                 ],
                 edit: [
+                  {
+                    title: "Удалить черновик",
+                    backgroundColor: "#f94b46",
+                    action: _vm.deleteDraft
+                  },
                   {
                     title: "Обновить черновик",
                     backgroundColor: "#90CAF9",

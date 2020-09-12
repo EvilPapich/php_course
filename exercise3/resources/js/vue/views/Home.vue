@@ -79,6 +79,11 @@
             ],
             'edit': [
               {
+                title: 'Удалить черновик',
+                backgroundColor: '#f94b46',
+                action: deleteDraft,
+              },
+              {
                 title: 'Обновить черновик',
                 backgroundColor: '#90CAF9',
                 action: editDraft,
@@ -346,6 +351,29 @@
             this.getRecentPosts().then((posts) => {
               this.posts = posts;
               this.isFetchingPosts = false;
+            });
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
+      },
+      deleteDraft() {
+        fetch("api/post/delete/draft", {
+          method: "POST",
+          headers: {
+            [userIdHeader]: this.user.id,
+          },
+          body: JSON.stringify({
+            postId: this.draft.id,
+          }),
+        }).then((res) => {
+          if (res.status === 200) {
+            this.closeDraftEditor();
+            this.getDrafts().then((drafts) => {
+              this.drafts = drafts;
+              this.isFetchingDrafts = false;
             });
           } else {
             throw new Error(res.statusText);
