@@ -2,7 +2,7 @@
   <fragment>
     <div
         class="full-height"
-        :style="{overflow: (showDraftEditor || showDraftList) ? 'hidden' : 'unset'}"
+        :style="{overflow: fixedScroll ? 'hidden' : 'unset'}"
     >
       <div class="home-view">
         <div class="home-header">
@@ -51,6 +51,7 @@
               <div>Посты за последние 7 дней:</div>
               <PostList
                   :posts="posts"
+                  :action="openPostView"
               />
               <div v-if="!isFetchingPosts && !posts.length" class="post-list-empty-text">
                 <em>Отсутствуют</em>
@@ -60,7 +61,7 @@
         </div>
       </div>
     </div>
-    <ModalLayout v-show="showDraftEditor">
+    <ModalLayout v-if="showDraftEditor">
       <DraftEditorModal
           :draft="draft"
           :closeHandler="closeDraftEditor"
@@ -97,12 +98,18 @@
           }[editor.mode ? editor.mode : 'new']"
       />
     </ModalLayout>
-    <ModalLayout v-show="showDraftList">
+    <ModalLayout v-if="showDraftList">
       <DraftListModal
           :drafts="drafts"
           :isFetchingDrafts="isFetchingDrafts"
           :closeDraftList="closeDraftList"
           :draftClick="(item) => clickDraft(item)"
+      />
+    </ModalLayout>
+    <ModalLayout v-if="showPostView">
+      <PostViewModal
+          :post="post"
+          :closePostView="closePostView"
       />
     </ModalLayout>
   </fragment>
@@ -117,6 +124,7 @@
   import PostList from "../components/PostList";
   import WideButton from "../components/WideButton";
   import DraftListModal from "../components/DraftListModal";
+  import PostViewModal from "../components/PostViewModal";
   Vue.use(Fragment.Plugin);
 
   const userIdHeader = 'x-user-id';
@@ -124,6 +132,7 @@
   export default {
     name: "Home",
     components: {
+      PostViewModal,
       DraftListModal,
       WideButton,
       PostList,
@@ -143,7 +152,18 @@
         drafts: [],
         isFetchingPosts: true,
         posts: [],
+        post: {},
+        showPostView: false,
       };
+    },
+    computed: {
+      fixedScroll() {
+        return (
+          this.showDraftEditor
+          || this.showDraftList
+          || this.showPostView
+        );
+      }
     },
     methods: {
       exitHandler() {
@@ -382,6 +402,12 @@
           alert(err.message);
         });
       },
+      openPostView() {
+        this.showPostView = true;
+      },
+      closePostView() {
+        this.showPostView = false;
+      }
     },
     mounted() {
       const userId = localStorage.getItem('userId');

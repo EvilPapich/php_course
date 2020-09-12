@@ -12,12 +12,14 @@
         </div>
         <div class="post-item-rating">
           <LikeCounter
+              v-if="post.likes !== undefined"
               :count="post.likes"
               :color="post.likes ? '#4CAF50' : '#ccc'"
               :hoverColor="'#4C7DFF'"
               :orientation="'top'"
           />
           <LikeCounter
+              v-if="post.dislikes !== undefined"
               :count="post.dislikes"
               :color="post.dislikes ? '#F94B46' : '#ccc'"
               :hoverColor="'#4C7DFF'"
