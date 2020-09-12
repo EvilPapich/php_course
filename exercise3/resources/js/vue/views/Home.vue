@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <fragment>
     <div
         class="full-height"
@@ -25,54 +25,33 @@
         </div>
         <div class="home-content">
           <div class="home-content-wrapper">
-            <div class="home-write-post" v-on:click="clickNewPost">
-              <div class="circle-icon add-icon">+</div>
-              <div class="write-post-btn">Написать пост</div>
-            </div>
-            <div class="home-drafts" v-on:click="openDraftList">
-              <div class="circle-icon drafts-count">
-                {{ isFetchingDrafts ? null : drafts.length }}
-              </div>
-              <div class="drafts-btn">Ваши черновики</div>
-            </div>
+            <WideButton :action="() => openDraftEditor()">
+              <template v-slot:icon="">
+                <CircleIcon
+                    :symbol="'+'"
+                    :style="{backgroundColor: '#4CAF50', marginRight: '10px'}"
+                />
+              </template>
+              <template v-slot:title="">
+                Написать пост
+              </template>
+            </WideButton>
+            <WideButton :action="openDraftList">
+              <template v-slot:icon="">
+                <CircleIcon
+                    :symbol="isFetchingDrafts ? null : drafts.length"
+                    :style="{backgroundColor: '#90CAF9', marginRight: '10px', fontSize: '12px'}"
+                />
+              </template>
+              <template v-slot:title="">
+                Ваши черновики
+              </template>
+            </WideButton>
             <div class="home-posts-list">
               <div>Посты за последние 7 дней:</div>
-              <div
-                  v-for="(post, postIndex) in posts"
-                  :key="postIndex"
-                  class="post-item"
-              >
-                <div class="post-item-header">
-                  <div class="post-item-title">
-                    {{ post.title }}
-                  </div>
-                  <div class="post-item-rating">
-
-                  </div>
-                </div>
-                <div class="post-item-text">
-                  {{ post.text }}
-                </div>
-                <div class="post-item-footer">
-                  <div class="post-tags-list">
-                    <div
-                        v-for="(tag, tagIndex) in post.tags"
-                        :key="tagIndex"
-                        class="tag-item"
-                    >
-                      {{ tag.name }}
-                    </div>
-                  </div>
-                  <div class="post-info">
-                    <div class="post-item-updated-at">
-                      {{ post.updated_at }}
-                    </div>
-                    <div class="post-item-author">
-                      {{ post.author.lname }} {{ post.author.fname }}
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <PostList
+                  :posts="posts"
+              />
               <div v-if="!isFetchingPosts && !posts.length" class="post-list-empty-text">
                 <em>Отсутствуют</em>
               </div>
@@ -81,133 +60,72 @@
         </div>
       </div>
     </div>
-    <div v-show="showDraftEditor" class="draft-editor-wrapper">
-      <div class="draft-editor">
-        <div class="draft-editor-header">
-          <div class="circle-icon close-icon" v-on:click="closeDraftEditor">x</div>
-        </div>
-        <div class="draft-editor-content">
-          <label>
-            <input
-                name="title"
-                type="text"
-                v-model="draft.title"
-                placeholder="Заголовок (обязательно)"
-            />
-          </label>
-          <label>
-            <textarea
-                class="draft-editor-textarea"
-                name="text"
-                v-model="draft.text"
-                placeholder="Текст (обязательно)"
-                rows="5"
-            ></textarea>
-          </label>
-          <label>
-            <input
-                name="tags"
-                type="text"
-                v-model="draft.tags"
-                placeholder="Введите теги через запятую (не обязательно)"
-            />
-          </label>
-        </div>
-        <div class="draft-editor-footer" :key="editor.mode">
-          <div v-if="!editor.mode || editor.mode === 'new'" class="draft-btns">
-            <div class="draft-editor-save-draft-btn"
-                 v-on:click="writeDraft"
-            >
-              Сохранить как черновик
-            </div>
-            <div class="draft-editor-save-post-btn"
-                 v-on:click="writePost"
-            >
-              Опубликовать
-            </div>
-          </div>
-          <div v-else-if="editor.mode === 'edit'" class="draft-btns">
-            <div class="draft-editor-edit-draft-btn"
-                 v-on:click="editDraft"
-            >
-              Обновить черновик
-            </div>
-            <div class="draft-editor-publish-post-btn"
-                 v-on:click="publishDraft"
-            >
-              Опубликовать черновик
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-show="showDraftList" class="draft-list-wrapper">
-    <div class="draft-list">
-      <div class="draft-list-header">
-        <div class="circle-icon close-icon" v-on:click="closeDraftList">x</div>
-      </div>
-      <div class="drafts-list-title">
-        <div class="circle-icon drafts-count">
-          {{ isFetchingDrafts ? null : drafts.length }}
-        </div>
-        <div class="drafts-btn">Ваши черновики</div>
-      </div>
-      <div class="draft-list-scroller">
-        <div
-            v-for="(draft, draftIndex) in drafts"
-            :key="draftIndex"
-            class="post-item"
-            v-on:click="clickDraft(draft)"
-        >
-          <div class="post-item-header">
-            <div class="post-item-title">
-              {{ draft.title }}
-            </div>
-            <div class="post-item-rating">
-
-            </div>
-          </div>
-          <div class="post-item-text">
-            {{ draft.text }}
-          </div>
-          <div class="post-item-footer">
-            <div class="post-tags-list">
-              <div
-                  v-for="(tag, tagIndex) in draft.tags"
-                  :key="tagIndex"
-                  class="tag-item"
-              >
-                {{ tag.name }}
-              </div>
-            </div>
-            <div class="post-info">
-              <div class="draft-note">
-                <em>Черновик</em>
-              </div>
-              <div class="post-item-updated-at">
-                {{ draft.updated_at }}
-              </div>
-              <div class="post-item-author">
-                {{ draft.author.lname }} {{ draft.author.fname }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    <ModalLayout v-show="showDraftEditor">
+      <DraftEditorModal
+          :draft="draft"
+          :closeHandler="closeDraftEditor"
+          :actionButtons="{
+            'new': [
+              {
+                title: 'Сохранить как черновик',
+                backgroundColor: '#90CAF9',
+                action: writeDraft,
+              },
+              {
+                title: 'Опубликовать',
+                backgroundColor: '#81C784',
+                action: writePost,
+              }
+            ],
+            'edit': [
+              {
+                title: 'Обновить черновик',
+                backgroundColor: '#90CAF9',
+                action: editDraft,
+              },
+              {
+                title: 'Опубликовать черновик',
+                backgroundColor: '#81C784',
+                action: publishDraft,
+              }
+            ]
+          }[editor.mode ? editor.mode : 'new']"
+      />
+    </ModalLayout>
+    <ModalLayout v-show="showDraftList">
+      <DraftListModal
+          :drafts="drafts"
+          :isFetchingDrafts="isFetchingDrafts"
+          :closeDraftList="closeDraftList"
+          :draftClick="(item) => clickDraft(item)"
+      />
+    </ModalLayout>
   </fragment>
 </template>
 
 <script>
   import Fragment from 'vue-fragment';
   import Vue from "vue";
+  import ModalLayout from "../layouts/ModalLayout";
+  import DraftEditorModal from "../components/DraftEditorModal";
+  import CircleIcon from "../components/CircleIcon";
+  import PostList from "../components/PostList";
+  import WideButton from "../components/WideButton";
+  import DraftListModal from "../components/DraftListModal";
   Vue.use(Fragment.Plugin);
 
   const userIdHeader = 'x-user-id';
 
   export default {
     name: "Home",
+    components: {
+      DraftListModal,
+      WideButton,
+      PostList,
+      CircleIcon,
+      DraftEditorModal,
+      ModalLayout
+    },
     data: function() {
       return {
         user: {},
@@ -458,5 +376,63 @@
   };
 </script>
 
-<style>
+<style scoped>
+  .home-view {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home-header {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    background: #f9f9f9;
+  }
+  .home-header-title {
+    display: flex;
+  }
+  .home-header-info {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .profile-info,
+  .user-info {
+    margin-right: 20px;
+    font-size: 13px;
+  }
+  .profile-info span,
+  .user-info span {
+    font-weight: 600;
+  }
+  .home-header-exit {
+    cursor: pointer;
+  }
+  .home-header-exit:hover {
+    color: #4c7dff;
+  }
+
+  .home-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    padding: 50px 0;
+  }
+  .home-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .home-posts-list {
+    margin-top: 5px;
+    padding: 0 40px;
+  }
+  .post-list-empty-text {
+    margin-top: 20px;
+    color: #ccc;
+  }
 </style>

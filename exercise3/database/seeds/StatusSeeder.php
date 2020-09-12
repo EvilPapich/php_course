@@ -12,11 +12,11 @@ class StatusSeeder extends Seeder
     public function run()
     {
       DB::table('statuses')->insert([
-        'name' => 'доступен'
+        'name' => 'Опубликован'
       ]);
 
       DB::table('statuses')->insert([
-        'name' => 'черновик'
+        'name' => 'Черновик'
       ]);
     }
 }
