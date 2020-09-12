@@ -1,0 +1,32 @@
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+.login-form input[name="login"],
+.login-form input[name="password"] {
+  font-family: 'Nunito', sans-serif;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #f9f9f9;
+  color: #636b6f;
+  border: none;
+  border-radius: 2px;
+  outline: none;
+  text-align: center;
+}
+.login-form button[name="submit"] {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  margin-top: 20px;
+  padding: 5px;
+  background: transparent;
+  color: #636b6f;
+  display: flex;
+  align-self: center;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+.login-form button[name="submit"]:hover {
+  color: #4c7dff;
+}
