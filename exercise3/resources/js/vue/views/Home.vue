@@ -25,7 +25,7 @@
         </div>
         <div class="home-content">
           <div class="home-content-wrapper">
-            <WideButton :action="() => openDraftEditor()">
+            <WideButton :action="clickNewPost">
               <template v-slot:icon="">
                 <CircleIcon
                     :symbol="'+'"
@@ -157,7 +157,7 @@
         drafts: [],
         isFetchingPosts: true,
         posts: [],
-        post: {},
+        viewedPostId: undefined,
         showPostView: false,
       };
     },
@@ -168,31 +168,18 @@
           || this.showDraftList
           || this.showPostView
         );
-      }
+      },
+      post() {
+        const post = this.posts.find(item => item.id === this.viewedPostId);
+
+        return post ? post : {};
+      },
     },
     methods: {
       exitHandler() {
         localStorage.clear();
         window.location = '/';
       },
-      //unused
-      fetchUser(userId) {
-        return fetch('api/user/get', {
-          method: 'GET',
-          headers: {
-            [userIdHeader]: userId,
-          },
-        }).then((res) => {
-          if (res.status === 200) {
-            return res.json();
-          } else {
-            throw new Error(res.statusText);
-          }
-        }).catch((err) => {
-          alert(err.message);
-        });
-      },
-      //
       fetchAuthor(userId) {
         return fetch('api/author/get', {
           method: 'GET',
@@ -409,11 +396,11 @@
       },
       openPostView(post) {
         this.showPostView = true;
-        this.post = post;
+        this.viewedPostId = post.id;
       },
       closePostView() {
         this.showPostView = false;
-        this.post = {};
+        this.viewedPostId = undefined;
       },
       ratePost(postId, value) {
         fetch("api/post/rate/post", {

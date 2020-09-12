@@ -565,6 +565,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -842,20 +846,30 @@ var userIdHeader = 'x-user-id';
       user: {},
       author: {},
       showDraftEditor: false,
+      localDraft: {},
       draft: {},
       editor: {},
       isFetchingDrafts: true,
       showDraftList: false,
       drafts: [],
+      editedDraftId: undefined,
       isFetchingPosts: true,
       posts: [],
-      post: {},
+      viewedPostId: undefined,
       showPostView: false
     };
   },
   computed: {
     fixedScroll: function fixedScroll() {
       return this.showDraftEditor || this.showDraftList || this.showPostView;
+    },
+    post: function post() {
+      var _this = this;
+
+      var post = this.posts.find(function (item) {
+        return item.id === _this.viewedPostId;
+      });
+      return post ? post : {};
     }
   },
   methods: {
@@ -863,22 +877,6 @@ var userIdHeader = 'x-user-id';
       localStorage.clear();
       window.location = '/';
     },
-    //unused
-    fetchUser: function fetchUser(userId) {
-      return fetch('api/user/get', {
-        method: 'GET',
-        headers: _defineProperty({}, userIdHeader, userId)
-      }).then(function (res) {
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          throw new Error(res.statusText);
-        }
-      })["catch"](function (err) {
-        alert(err.message);
-      });
-    },
-    //
     fetchAuthor: function fetchAuthor(userId) {
       return fetch('api/author/get', {
         method: 'GET',
@@ -912,7 +910,7 @@ var userIdHeader = 'x-user-id';
       this.showDraftList = true;
     },
     clickDraft: function clickDraft(draft) {
-      var _this = this;
+      var _this2 = this;
 
       this.draft = _objectSpread(_objectSpread({}, draft), {}, {
         tags: draft.tags.map(function (item) {
@@ -922,8 +920,8 @@ var userIdHeader = 'x-user-id';
       this.showDraftList = false;
       this.editor.mode = "edit";
       this.openDraftEditor(function () {
-        _this.showDraftList = true;
-        _this.editor.mode = undefined;
+        _this2.showDraftList = true;
+        _this2.editor.mode = undefined;
       });
     },
     closeDraftList: function closeDraftList() {
@@ -938,36 +936,9 @@ var userIdHeader = 'x-user-id';
       });
     },
     writeDraft: function writeDraft() {
-      var _this2 = this;
-
-      fetch('api/post/write/draft', {
-        method: 'POST',
-        headers: _defineProperty({}, userIdHeader, this.user.id),
-        body: JSON.stringify({
-          title: this.draft.title,
-          text: this.draft.text,
-          tags: this.preparePostTags(this.draft.tags)
-        })
-      }).then(function (res) {
-        if (res.status === 200) {
-          _this2.showDraftEditor = false;
-          _this2.draft = {};
-
-          _this2.getDrafts().then(function (drafts) {
-            _this2.drafts = drafts;
-            _this2.isFetchingDrafts = false;
-          });
-        } else {
-          throw new Error(res.statusText);
-        }
-      })["catch"](function (err) {
-        alert(err.message);
-      });
-    },
-    writePost: function writePost() {
       var _this3 = this;
 
-      fetch('api/post/write/post', {
+      fetch('api/post/write/draft', {
         method: 'POST',
         headers: _defineProperty({}, userIdHeader, this.user.id),
         body: JSON.stringify({
@@ -980,9 +951,36 @@ var userIdHeader = 'x-user-id';
           _this3.showDraftEditor = false;
           _this3.draft = {};
 
-          _this3.getRecentPosts().then(function (posts) {
-            _this3.posts = posts;
-            _this3.isFetchingPosts = false;
+          _this3.getDrafts().then(function (drafts) {
+            _this3.drafts = drafts;
+            _this3.isFetchingDrafts = false;
+          });
+        } else {
+          throw new Error(res.statusText);
+        }
+      })["catch"](function (err) {
+        alert(err.message);
+      });
+    },
+    writePost: function writePost() {
+      var _this4 = this;
+
+      fetch('api/post/write/post', {
+        method: 'POST',
+        headers: _defineProperty({}, userIdHeader, this.user.id),
+        body: JSON.stringify({
+          title: this.draft.title,
+          text: this.draft.text,
+          tags: this.preparePostTags(this.draft.tags)
+        })
+      }).then(function (res) {
+        if (res.status === 200) {
+          _this4.showDraftEditor = false;
+          _this4.draft = {};
+
+          _this4.getRecentPosts().then(function (posts) {
+            _this4.posts = posts;
+            _this4.isFetchingPosts = false;
           });
         } else {
           throw new Error(res.statusText);
@@ -1020,36 +1018,9 @@ var userIdHeader = 'x-user-id';
       });
     },
     editDraft: function editDraft() {
-      var _this4 = this;
-
-      fetch("api/post/edit/draft", {
-        method: "POST",
-        headers: _defineProperty({}, userIdHeader, this.user.id),
-        body: JSON.stringify({
-          postId: this.draft.id,
-          title: this.draft.title,
-          text: this.draft.text,
-          tags: this.preparePostTags(this.draft.tags)
-        })
-      }).then(function (res) {
-        if (res.status === 200) {
-          _this4.closeDraftEditor();
-
-          _this4.getDrafts().then(function (drafts) {
-            _this4.drafts = drafts;
-            _this4.isFetchingDrafts = false;
-          });
-        } else {
-          throw new Error(res.statusText);
-        }
-      })["catch"](function (err) {
-        alert(err.message);
-      });
-    },
-    publishDraft: function publishDraft() {
       var _this5 = this;
 
-      fetch("api/post/publish/draft", {
+      fetch("api/post/edit/draft", {
         method: "POST",
         headers: _defineProperty({}, userIdHeader, this.user.id),
         body: JSON.stringify({
@@ -1066,10 +1037,37 @@ var userIdHeader = 'x-user-id';
             _this5.drafts = drafts;
             _this5.isFetchingDrafts = false;
           });
+        } else {
+          throw new Error(res.statusText);
+        }
+      })["catch"](function (err) {
+        alert(err.message);
+      });
+    },
+    publishDraft: function publishDraft() {
+      var _this6 = this;
 
-          _this5.getRecentPosts().then(function (posts) {
-            _this5.posts = posts;
-            _this5.isFetchingPosts = false;
+      fetch("api/post/publish/draft", {
+        method: "POST",
+        headers: _defineProperty({}, userIdHeader, this.user.id),
+        body: JSON.stringify({
+          postId: this.draft.id,
+          title: this.draft.title,
+          text: this.draft.text,
+          tags: this.preparePostTags(this.draft.tags)
+        })
+      }).then(function (res) {
+        if (res.status === 200) {
+          _this6.closeDraftEditor();
+
+          _this6.getDrafts().then(function (drafts) {
+            _this6.drafts = drafts;
+            _this6.isFetchingDrafts = false;
+          });
+
+          _this6.getRecentPosts().then(function (posts) {
+            _this6.posts = posts;
+            _this6.isFetchingPosts = false;
           });
         } else {
           throw new Error(res.statusText);
@@ -1079,7 +1077,7 @@ var userIdHeader = 'x-user-id';
       });
     },
     deleteDraft: function deleteDraft() {
-      var _this6 = this;
+      var _this7 = this;
 
       fetch("api/post/delete/draft", {
         method: "POST",
@@ -1089,11 +1087,11 @@ var userIdHeader = 'x-user-id';
         })
       }).then(function (res) {
         if (res.status === 200) {
-          _this6.closeDraftEditor();
+          _this7.closeDraftEditor();
 
-          _this6.getDrafts().then(function (drafts) {
-            _this6.drafts = drafts;
-            _this6.isFetchingDrafts = false;
+          _this7.getDrafts().then(function (drafts) {
+            _this7.drafts = drafts;
+            _this7.isFetchingDrafts = false;
           });
         } else {
           throw new Error(res.statusText);
@@ -1104,14 +1102,14 @@ var userIdHeader = 'x-user-id';
     },
     openPostView: function openPostView(post) {
       this.showPostView = true;
-      this.post = post;
+      this.viewedPostId = post.id;
     },
     closePostView: function closePostView() {
       this.showPostView = false;
-      this.post = {};
+      this.viewedPostId = undefined;
     },
     ratePost: function ratePost(postId, value) {
-      var _this7 = this;
+      var _this8 = this;
 
       fetch("api/post/rate/post", {
         method: "POST",
@@ -1122,9 +1120,9 @@ var userIdHeader = 'x-user-id';
         })
       }).then(function (res) {
         if (res.status === 200) {
-          _this7.getRecentPosts().then(function (posts) {
-            _this7.posts = posts;
-            _this7.isFetchingPosts = false;
+          _this8.getRecentPosts().then(function (posts) {
+            _this8.posts = posts;
+            _this8.isFetchingPosts = false;
           });
         } else {
           throw new Error(res.statusText);
@@ -1135,21 +1133,21 @@ var userIdHeader = 'x-user-id';
     }
   },
   mounted: function mounted() {
-    var _this8 = this;
+    var _this9 = this;
 
     var userId = localStorage.getItem('userId');
     this.fetchAuthor(userId).then(function (author) {
-      _this8.author = author;
-      _this8.user = author.user;
+      _this9.author = author;
+      _this9.user = author.user;
     }).then(function () {
-      _this8.getDrafts().then(function (drafts) {
-        _this8.drafts = drafts;
-        _this8.isFetchingDrafts = false;
+      _this9.getDrafts().then(function (drafts) {
+        _this9.drafts = drafts;
+        _this9.isFetchingDrafts = false;
       });
 
-      _this8.getRecentPosts().then(function (posts) {
-        _this8.posts = posts;
-        _this8.isFetchingPosts = false;
+      _this9.getRecentPosts().then(function (posts) {
+        _this9.posts = posts;
+        _this9.isFetchingPosts = false;
       });
     });
   }
@@ -3345,19 +3343,21 @@ var render = function() {
       "div",
       { staticClass: "post-view-content", style: { flex: 1 } },
       [
-        _c("PostItem", {
-          attrs: {
-            post: _vm.post,
-            needOverflowText: false,
-            likeAction: _vm.likeAction,
-            dislikeAction: _vm.dislikeAction,
-            styles: {
-              postItem: { flex: 1 },
-              postItemText: { flex: 1 },
-              hover: false
-            }
-          }
-        })
+        Object.keys(_vm.post).length
+          ? _c("PostItem", {
+              attrs: {
+                post: _vm.post,
+                needOverflowText: false,
+                likeAction: _vm.likeAction,
+                dislikeAction: _vm.dislikeAction,
+                styles: {
+                  postItem: { flex: 1 },
+                  postItemText: { flex: 1 },
+                  hover: false
+                }
+              }
+            })
+          : _c("div", [_c("em", [_vm._v("Такой публикации не существует")])])
       ],
       1
     )
@@ -3570,11 +3570,7 @@ var render = function() {
                 { staticClass: "home-content-wrapper" },
                 [
                   _c("WideButton", {
-                    attrs: {
-                      action: function() {
-                        return _vm.openDraftEditor()
-                      }
-                    },
+                    attrs: { action: _vm.clickNewPost },
                     scopedSlots: _vm._u([
                       {
                         key: "icon",

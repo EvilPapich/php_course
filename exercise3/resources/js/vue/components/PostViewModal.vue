@@ -8,6 +8,7 @@
     </div>
     <div class="post-view-content" :style="{flex: 1}">
       <PostItem
+          v-if="Object.keys(post).length"
           :post="post"
           :needOverflowText="false"
           :likeAction="likeAction"
@@ -18,6 +19,9 @@
             hover: false,
           }"
       />
+      <div v-else>
+        <em>Такой публикации не существует</em>
+      </div>
     </div>
   </div>
 </template>
