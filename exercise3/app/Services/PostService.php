@@ -144,7 +144,22 @@ class PostService
       ['status_id', '=', Status::PUBLISHED],
     ])->firstOrFail();
 
-    $post->opinions()->updateExistingPivot($authorId, ['value' => $value]);
+    $opinion = collect(
+      $post->opinions()->wherePivot('author_id', $authorId)->get()
+    );
+
+    if (
+      $opinion->count() === 1
+      && $opinion->first()->pivot->value === $value
+    ) {
+      $post->opinions()->detach($authorId);
+    } else if (
+      $opinion->count() === 1
+    ) {
+      $post->opinions()->updateExistingPivot($authorId, ['value' => $value]);
+    } else {
+      $post->opinions()->attach($authorId, ['value' => $value]);
+    }
 
     $post->save();
   }
