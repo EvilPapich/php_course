@@ -4,7 +4,7 @@
         v-for="(post, postIndex) in posts"
         :key="postIndex"
         class="post-item"
-        v-on:click="action(post)"
+        v-on:click="() => action(post)"
     >
       <div class="post-item-header">
         <div class="post-item-title">
@@ -17,6 +17,7 @@
               :color="post.likes ? '#4CAF50' : '#ccc'"
               :hoverColor="'#4C7DFF'"
               :orientation="'top'"
+              :action="() => likeAction(post)"
           />
           <LikeCounter
               v-if="post.dislikes !== undefined"
@@ -24,6 +25,7 @@
               :color="post.dislikes ? '#F94B46' : '#ccc'"
               :hoverColor="'#4C7DFF'"
               :orientation="'bottom'"
+              :action="() => dislikeAction(post)"
           />
         </div>
       </div>
@@ -66,7 +68,9 @@
       action: {
         default: ()=>{},
         type: Function,
-      }
+      },
+      likeAction: Function,
+      dislikeAction: Function,
     },
     methods: {
       overflowText,

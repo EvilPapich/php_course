@@ -52,6 +52,8 @@
               <PostList
                   :posts="posts"
                   :action="openPostView"
+                  :likeAction="(item) => ratePost(item.id, 1)"
+                  :dislikeAction="(item) => ratePost(item.id, 0)"
               />
               <div v-if="!isFetchingPosts && !posts.length" class="post-list-empty-text">
                 <em>Отсутствуют</em>
@@ -407,7 +409,30 @@
       },
       closePostView() {
         this.showPostView = false;
-      }
+      },
+      ratePost(postId, value) {
+        fetch("api/post/rate/post", {
+          method: "POST",
+          headers: {
+            [userIdHeader]: this.user.id,
+          },
+          body: JSON.stringify({
+            postId: postId,
+            value: value,
+          }),
+        }).then((res) => {
+          if (res.status === 200) {
+            this.getRecentPosts().then((posts) => {
+              this.posts = posts;
+              this.isFetchingPosts = false;
+            });
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
+      },
     },
     mounted() {
       const userId = localStorage.getItem('userId');

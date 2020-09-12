@@ -38,5 +38,6 @@ Route::middleware('app.auth')->group(function () {
     Route::post('/edit/draft', 'PostController@editDraft');
     Route::post('/publish/draft', 'PostController@publishDraft');
     Route::post('/delete/draft', 'PostController@deleteDraft');
+    Route::post('/rate/post', 'PostController@ratePost');
   });
 });

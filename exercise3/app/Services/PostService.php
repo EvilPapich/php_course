@@ -144,7 +144,7 @@ class PostService
       ['status_id', '=', Status::PUBLISHED],
     ])->firstOrFail();
 
-    $post->opinions()->attach($authorId, ['value' => $value]);
+    $post->opinions()->updateExistingPivot($authorId, ['value' => $value]);
 
     $post->save();
   }

@@ -440,6 +440,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -454,7 +456,9 @@ __webpack_require__.r(__webpack_exports__);
     action: {
       "default": function _default() {},
       type: Function
-    }
+    },
+    likeAction: Function,
+    dislikeAction: Function
   },
   methods: {
     overflowText: _utils_overflowText__WEBPACK_IMPORTED_MODULE_2__["default"]
@@ -608,6 +612,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
 //
 //
 //
@@ -1017,24 +1023,47 @@ var userIdHeader = 'x-user-id';
     },
     closePostView: function closePostView() {
       this.showPostView = false;
+    },
+    ratePost: function ratePost(postId, value) {
+      var _this7 = this;
+
+      fetch("api/post/rate/post", {
+        method: "POST",
+        headers: _defineProperty({}, userIdHeader, this.user.id),
+        body: JSON.stringify({
+          postId: postId,
+          value: value
+        })
+      }).then(function (res) {
+        if (res.status === 200) {
+          _this7.getRecentPosts().then(function (posts) {
+            _this7.posts = posts;
+            _this7.isFetchingPosts = false;
+          });
+        } else {
+          throw new Error(res.statusText);
+        }
+      })["catch"](function (err) {
+        alert(err.message);
+      });
     }
   },
   mounted: function mounted() {
-    var _this7 = this;
+    var _this8 = this;
 
     var userId = localStorage.getItem('userId');
     this.fetchAuthor(userId).then(function (author) {
-      _this7.author = author;
-      _this7.user = author.user;
+      _this8.author = author;
+      _this8.user = author.user;
     }).then(function () {
-      _this7.getDrafts().then(function (drafts) {
-        _this7.drafts = drafts;
-        _this7.isFetchingDrafts = false;
+      _this8.getDrafts().then(function (drafts) {
+        _this8.drafts = drafts;
+        _this8.isFetchingDrafts = false;
       });
 
-      _this7.getRecentPosts().then(function (posts) {
-        _this7.posts = posts;
-        _this7.isFetchingPosts = false;
+      _this8.getRecentPosts().then(function (posts) {
+        _this8.posts = posts;
+        _this8.isFetchingPosts = false;
       });
     });
   }
@@ -3007,7 +3036,7 @@ var render = function() {
           key: postIndex,
           staticClass: "post-item",
           on: {
-            click: function($event) {
+            click: function() {
               return _vm.action(post)
             }
           }
@@ -3028,7 +3057,10 @@ var render = function() {
                         count: post.likes,
                         color: post.likes ? "#4CAF50" : "#ccc",
                         hoverColor: "#4C7DFF",
-                        orientation: "top"
+                        orientation: "top",
+                        action: function() {
+                          return _vm.likeAction(post)
+                        }
                       }
                     })
                   : _vm._e(),
@@ -3039,7 +3071,10 @@ var render = function() {
                         count: post.dislikes,
                         color: post.dislikes ? "#F94B46" : "#ccc",
                         hoverColor: "#4C7DFF",
-                        orientation: "bottom"
+                        orientation: "bottom",
+                        action: function() {
+                          return _vm.dislikeAction(post)
+                        }
                       }
                     })
                   : _vm._e()
@@ -3409,7 +3444,16 @@ var render = function() {
                       _c("div", [_vm._v("Посты за последние 7 дней:")]),
                       _vm._v(" "),
                       _c("PostList", {
-                        attrs: { posts: _vm.posts, action: _vm.openPostView }
+                        attrs: {
+                          posts: _vm.posts,
+                          action: _vm.openPostView,
+                          likeAction: function(item) {
+                            return _vm.ratePost(item.id, 1)
+                          },
+                          dislikeAction: function(item) {
+                            return _vm.ratePost(item.id, 0)
+                          }
+                        }
                       }),
                       _vm._v(" "),
                       !_vm.isFetchingPosts && !_vm.posts.length
