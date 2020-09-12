@@ -11,7 +11,18 @@
           {{ post.title }}
         </div>
         <div class="post-item-rating">
-
+          <LikeCounter
+              :count="post.likes"
+              :color="post.likes ? '#4CAF50' : '#ccc'"
+              :hoverColor="'#4C7DFF'"
+              :orientation="'top'"
+          />
+          <LikeCounter
+              :count="post.dislikes"
+              :color="post.dislikes ? '#F94B46' : '#ccc'"
+              :hoverColor="'#4C7DFF'"
+              :orientation="'bottom'"
+          />
         </div>
       </div>
       <div class="post-item-text">
@@ -44,8 +55,11 @@
 </template>
 
 <script>
+  import LikeIcon from "../icons/LikeIcon";
+  import LikeCounter from "./LikeCounter";
   export default {
     name: "PostList",
+    components: {LikeCounter, LikeIcon},
     props: {
       posts: Array,
       action: {
@@ -82,7 +96,8 @@
     font-weight: 600;
   }
   .post-item-rating {
-
+    display: flex;
+    flex-direction: row;
   }
   .post-item-text {
     margin-bottom: 15px;

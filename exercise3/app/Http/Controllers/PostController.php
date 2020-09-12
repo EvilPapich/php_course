@@ -157,4 +157,28 @@ class PostController
 
     return json_encode([]);
   }
+
+  public function ratePost(Request $request) {
+    $userId = $request->header(User::USER_ID_HEADER);
+
+    $author = AuthorService::getAuthorByUserId($userId);
+
+    $body = $request->json();
+
+    $validator = Validator::make($body->all(), [
+      'postId' => ['required'],
+      'value' => ['required', 'in:0,1']
+    ]);
+
+    if ($validator->fails()) {
+      abort(400, $validator->messages());
+    }
+
+    $postId = $body->get('postId');
+    $value = $body->get('value');
+
+    PostService::ratePost($postId, $author->id, $value);
+
+    return json_encode([]);
+  }
 }

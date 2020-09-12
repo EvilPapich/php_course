@@ -27,4 +27,9 @@ class Post extends Model
   public function author() {
     return $this->belongsTo('App\Models\Author');
   }
+
+  public function opinions() {
+    return $this->belongsToMany('App\Models\Author', 'post_opinions')
+      ->withPivot('value');
+  }
 }
