@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\Status;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class PostService
 {
@@ -39,10 +40,13 @@ class PostService
     $filters = array_filter($filters);
 
     $result = Post::with([
-        'status',
-        'author',
-        'tags',
-        'comments.author',
+        'status' => function() {},
+        'author' => function() {},
+        'tags' => function() {},
+        'comments' => function (BelongsToMany $query) {
+          $query->orderBy('updated_at', 'desc');
+        },
+        'comments.author' => function () {},
       ])
       ->withCount([
         'opinions as likes' => function (Builder $query) {
