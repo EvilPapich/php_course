@@ -579,6 +579,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1493,7 +1507,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.post-view[data-v-96a04254] {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  height: calc(100% - (15px*2) - (50px*2));\n  max-width: 600px;\n  background: white;\n  border-radius: 2px;\n  padding: 15px 20px;\n}\n.post-view-header[data-v-96a04254] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n  margin-bottom: 20px;\n}\n.post-view-content[data-v-96a04254] {\n  display: flex;\n  flex-direction: column;\n}\n", ""]);
+exports.push([module.i, "\n.post-view[data-v-96a04254] {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  height: calc(100% - (15px*2) - (50px*2));\n  max-width: 600px;\n  background: white;\n  border-radius: 2px;\n  padding: 15px 20px;\n}\n.post-view-header[data-v-96a04254] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n  margin-bottom: 20px;\n}\n.post-view-content[data-v-96a04254] {\n  display: flex;\n  flex-direction: column;\n}\n.post-view-write-comment-wrapper[data-v-96a04254] {\n  display: flex;\n  flex-direction: row;\n  padding: 15px 20px;\n  background: #f9f9f9;\n  border-radius: 2px;\n  margin-bottom: 15px;\n}\n.post-view-write-comment-wrapper > label[data-v-96a04254] {\n  display: flex;\n  flex: 1;\n}\n.post-view-write-comment-input[data-v-96a04254] {\n  font-family: 'Nunito', sans-serif;\n  display: flex;\n  flex: 1;\n  padding: 10px;\n  background: #f9f9f9;\n  color: #636b6f;\n  border: none;\n  border-radius: 2px;\n  outline: none;\n}\n.post-view-write-comment-submit[data-v-96a04254] {\n  padding: 5px 10px;\n  margin-left: 20px;\n  border-radius: 2px;\n  color: white;\n  font-weight: unset;\n  display: flex;\n  align-self: center;\n  cursor: pointer;\n  border: none;\n  outline: none;\n  background: #90CAF9;\n}\n", ""]);
 
 // exports
 
@@ -20714,19 +20728,42 @@ var render = function() {
       { staticClass: "post-view-content", style: { flex: 1 } },
       [
         Object.keys(_vm.post).length
-          ? _c("PostItem", {
-              attrs: {
-                post: _vm.post,
-                needOverflowText: false,
-                likeAction: _vm.likeAction,
-                dislikeAction: _vm.dislikeAction,
-                styles: {
-                  postItem: { flex: 1 },
-                  postItemText: { flex: 1 },
-                  hover: false
-                }
-              }
-            })
+          ? _c(
+              "fragment",
+              [
+                _c("PostItem", {
+                  style: { marginBottom: "20px" },
+                  attrs: {
+                    post: _vm.post,
+                    needOverflowText: false,
+                    likeAction: _vm.likeAction,
+                    dislikeAction: _vm.dislikeAction,
+                    styles: {
+                      //postItem: {flex: 1},
+                      //postItemText: {flex: 1},
+                      hover: false
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "post-view-write-comment-wrapper" }, [
+                  _c("label", [
+                    _c("input", {
+                      staticClass: "post-view-write-comment-input",
+                      attrs: {
+                        type: "text",
+                        placeholder: "Оставить комментарий..."
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "post-view-write-comment-submit" }, [
+                    _vm._v("\n          Отправить\n        ")
+                  ])
+                ])
+              ],
+              1
+            )
           : _c("div", [_c("em", [_vm._v("Такой публикации не существует")])])
       ],
       1

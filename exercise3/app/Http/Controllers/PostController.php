@@ -193,4 +193,29 @@ class PostController
 
     return json_encode([]);
   }
+
+  public function writeComment(Request $request) {
+    $userId = $request->header(User::USER_ID_HEADER);
+
+    $author = AuthorService::getAuthorByUserId($userId);
+
+    $body = $request->json();
+
+    $validator = Validator::make($body->all(), [
+      'postId' => ['required'],
+      'message' => ['required'],
+    ]);
+
+    if ($validator->fails()) {
+      abort(400, $validator->messages());
+    }
+
+    $postId = $body->get('postId');
+    $referenceId = $body->get('referenceId');
+    $message = $body->get('message');
+
+    PostService::writeComment($postId, $author->id, $referenceId, $message);
+
+    return json_encode([]);
+  }
 }

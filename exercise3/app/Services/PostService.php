@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Status;
 use Carbon\Carbon;
@@ -37,7 +38,7 @@ class PostService
 
     $filters = array_filter($filters);
 
-    $result = Post::with(['status','author','tags'])
+    $result = Post::with(['status','author','tags','comments'])
       ->withCount([
         'opinions as likes' => function (Builder $query) {
           $query->where('value', '=', 1);
@@ -198,6 +199,27 @@ class PostService
     } else {
       $post->opinions()->attach($authorId, ['value' => $value]);
     }
+
+    $post->save();
+  }
+
+  public static function writeComment(Int $postId, Int $authorId, Int $referenceId, Int $message) {
+    $post = Post::where([
+      ['id', '=', $postId],
+      ['status_id', '=', Status::PUBLISHED],
+    ])->firstOrFail();
+
+    $comment = Comment::create([
+      'message' => $message,
+    ]);
+
+    $comment->save();
+
+    $post->comments()->attach($comment->id, [
+      'post_id' => $postId,
+      'author_id' => $authorId,
+      'reference_id' => $referenceId
+    ]);
 
     $post->save();
   }

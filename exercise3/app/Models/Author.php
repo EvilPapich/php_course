@@ -17,8 +17,17 @@ class Author extends Model
     return $this->belongsTo('App\Models\User');
   }
 
-  public function opinions() {
+  public function postOpinions() {
     return $this->belongsToMany('App\Models\Post', 'post_opinions')
+      ->withPivot('value');
+  }
+
+  public function comments() {
+    return $this->belongsToMany('App\Models\Comment');
+  }
+
+  public function commentOpinions() {
+    return $this->belongsToMany('App\Models\Comment', 'comment_opinions')
       ->withPivot('value');
   }
 }
