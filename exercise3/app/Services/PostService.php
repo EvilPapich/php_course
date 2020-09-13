@@ -203,7 +203,7 @@ class PostService
     $post->save();
   }
 
-  public static function writeComment(Int $postId, Int $authorId, Int $referenceId, Int $message) {
+  public static function writeComment(Int $postId, Int $authorId, ?Int $referenceId, String $message) {
     $post = Post::where([
       ['id', '=', $postId],
       ['status_id', '=', Status::PUBLISHED],

@@ -148,6 +148,7 @@
           :closePostView="closePostView"
           :likeAction="(item) => ratePost(item.id, 1)"
           :dislikeAction="(item) => ratePost(item.id, 0)"
+          :commentAction="(postId, message, commentId) => writeComment(postId, message, commentId)"
       />
     </ModalLayout>
   </fragment>
@@ -525,6 +526,30 @@
       clickTagNavigatorItem(tag) {
         this.tags = this.tags.filter(item => item.id !== tag.id);
       },
+      writeComment(postId, message, refId) {
+        fetch("api/post/write/post/comment", {
+          method: "POST",
+          headers: {
+            [userIdHeader]: this.user.id,
+          },
+          body: JSON.stringify({
+            postId: postId,
+            referenceId: refId,
+            message: message,
+          }),
+        }).then((res) => {
+          if (res.status === 200) {
+            this.getRecentPosts().then((posts) => {
+              this.posts = posts;
+              this.isFetchingPosts = false;
+            });
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
+      }
     },
     mounted() {
       const userId = localStorage.getItem('userId');

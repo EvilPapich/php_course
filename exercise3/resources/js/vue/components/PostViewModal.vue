@@ -6,7 +6,7 @@
           :action="closePostView"
       />
     </div>
-    <div class="post-view-content" :style="{flex: 1}">
+    <div class="post-view-content">
       <fragment v-if="Object.keys(post).length">
         <PostItem
             :post="post"
@@ -26,11 +26,20 @@
                 class="post-view-write-comment-input"
                 type="text"
                 placeholder="Оставить комментарий..."
+                v-model="message"
             />
           </label>
-          <div class="post-view-write-comment-submit">
+          <div
+              class="post-view-write-comment-submit"
+              v-on:click="() => clickCommentSubmit(null)"
+          >
             Отправить
           </div>
+        </div>
+        <div class="comment-list-scroller">
+          <CommentList
+              :comments="post.comments"
+          />
         </div>
       </fragment>
       <div v-else>
@@ -43,14 +52,27 @@
 <script>
   import CloseButton from "./CloseButton";
   import PostItem from "./PostItem";
+  import CommentList from "./CommentList";
   export default {
     name: "PostViewModal",
-    components: {PostItem, CloseButton},
+    components: {CommentList, PostItem, CloseButton},
     props: {
       post: Object,
       closePostView: Function,
       likeAction: Function,
       dislikeAction: Function,
+      commentAction: Function,
+    },
+    data() {
+      return {
+        message: "",
+      }
+    },
+    methods: {
+      clickCommentSubmit(commentId) {
+        this.commentAction(this.post.id, this.message, commentId);
+        this.message = "";
+      }
     }
   }
 </script>
@@ -75,6 +97,8 @@
   .post-view-content {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    overflow: hidden;
   }
 
   .post-view-write-comment-wrapper {
@@ -112,5 +136,10 @@
     border: none;
     outline: none;
     background: #90CAF9;
+  }
+  .comment-list-scroller {
+    overflow-y: auto;
+    max-width: 600px;
+    padding: 0 0 0 40px;
   }
 </style>
