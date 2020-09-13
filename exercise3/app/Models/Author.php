@@ -23,7 +23,7 @@ class Author extends Model
   }
 
   public function comments() {
-    return $this->belongsToMany('App\Models\Comment');
+    return $this->belongsToMany('App\Models\Comment','post_comments');
   }
 
   public function commentOpinions() {

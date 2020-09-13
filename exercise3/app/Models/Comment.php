@@ -14,15 +14,15 @@ class Comment extends Model
   ];
 
   public function post() {
-    return $this->hasOne('App\Models\Post');
+    return $this->belongsToMany('App\Models\Post','post_comments');
   }
 
   public function author() {
-    return $this->hasOne('App\Models\Author');
+    return $this->belongsToMany('App\Models\Author','post_comments');
   }
 
   public function reference() {
-    return $this->hasOne('App\Models\Comment');
+    return $this->belongsToMany('App\Models\Comment','post_comments');
   }
 
   public function opinions() {

@@ -171,6 +171,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CommentItem",
   props: {
@@ -20437,6 +20440,16 @@ var render = function() {
       _c("div", { staticClass: "comment-info" }, [
         _c("div", { staticClass: "comment-item-updated-at" }, [
           _vm._v("\n        " + _vm._s(_vm.comment.updated_at) + "\n      ")
+        ]),
+        _vm._v(" "),
+        _c("div", [
+          _vm._v(
+            "\n        " +
+              _vm._s(_vm.comment.author[0].lname) +
+              " " +
+              _vm._s(_vm.comment.author[0].fname) +
+              "\n      "
+          )
         ])
       ])
     ])

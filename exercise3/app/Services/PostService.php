@@ -38,7 +38,12 @@ class PostService
 
     $filters = array_filter($filters);
 
-    $result = Post::with(['status','author','tags','comments'])
+    $result = Post::with([
+        'status',
+        'author',
+        'tags',
+        'comments.author',
+      ])
       ->withCount([
         'opinions as likes' => function (Builder $query) {
           $query->where('value', '=', 1);

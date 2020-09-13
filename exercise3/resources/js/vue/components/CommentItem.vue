@@ -6,7 +6,10 @@
     <div class="comment-item-footer">
       <div class="comment-info">
         <div class="comment-item-updated-at">
-          {{ comment.updated_at }}
+          {{comment.updated_at}}
+        </div>
+        <div>
+          {{comment.author[0].lname}} {{comment.author[0].fname}}
         </div>
       </div>
     </div>
