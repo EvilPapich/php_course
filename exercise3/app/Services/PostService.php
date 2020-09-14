@@ -265,4 +265,26 @@ class PostService
 
     $comment->save();
   }
+
+  public static function editComment(Int $commentId, Int $authorId, String $message) {
+    $comment = Comment::where([
+      ['id', $commentId],
+    ])->whereHas('author', function(Builder $query) use ($authorId) {
+      $query->where('author_id', '=', $authorId);
+    })->firstOrFail();
+
+    $comment->message = $message;
+
+    $comment->save();
+  }
+
+  public static function deleteComment(Int $commentId, Int $authorId) {
+    $comment = Comment::where([
+      ['id', $commentId],
+    ])->whereHas('author', function(Builder $query) use ($authorId) {
+      $query->where('author_id', '=', $authorId);
+    })->firstOrFail();
+
+    $comment->delete();
+  }
 }

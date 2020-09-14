@@ -1843,25 +1843,68 @@ var userIdHeader = 'x-user-id';
         alert(err.message);
       });
     },
-    editComment: function editComment(commentId, message) {},
-    deleteComment: function deleteComment(commentId) {}
+    editComment: function editComment(commentId, message) {
+      var _this12 = this;
+
+      fetch("api/post/edit/post/comment", {
+        method: "POST",
+        headers: _defineProperty({}, userIdHeader, this.user.id),
+        body: JSON.stringify({
+          commentId: commentId,
+          message: message
+        })
+      }).then(function (res) {
+        if (res.status === 200) {
+          _this12.getRecentPosts().then(function (posts) {
+            _this12.posts = posts;
+            _this12.isFetchingPosts = false;
+          });
+        } else {
+          throw new Error(res.statusText);
+        }
+      })["catch"](function (err) {
+        alert(err.message);
+      });
+    },
+    deleteComment: function deleteComment(commentId) {
+      var _this13 = this;
+
+      fetch("api/post/delete/post/comment", {
+        method: "POST",
+        headers: _defineProperty({}, userIdHeader, this.user.id),
+        body: JSON.stringify({
+          commentId: commentId
+        })
+      }).then(function (res) {
+        if (res.status === 200) {
+          _this13.getRecentPosts().then(function (posts) {
+            _this13.posts = posts;
+            _this13.isFetchingPosts = false;
+          });
+        } else {
+          throw new Error(res.statusText);
+        }
+      })["catch"](function (err) {
+        alert(err.message);
+      });
+    }
   },
   mounted: function mounted() {
-    var _this12 = this;
+    var _this14 = this;
 
     var userId = localStorage.getItem('userId');
     this.fetchAuthor(userId).then(function (author) {
-      _this12.author = author;
-      _this12.user = author.user;
+      _this14.author = author;
+      _this14.user = author.user;
     }).then(function () {
-      _this12.getDrafts().then(function (drafts) {
-        _this12.drafts = drafts;
-        _this12.isFetchingDrafts = false;
+      _this14.getDrafts().then(function (drafts) {
+        _this14.drafts = drafts;
+        _this14.isFetchingDrafts = false;
       });
 
-      _this12.getRecentPosts().then(function (posts) {
-        _this12.posts = posts;
-        _this12.isFetchingPosts = false;
+      _this14.getRecentPosts().then(function (posts) {
+        _this14.posts = posts;
+        _this14.isFetchingPosts = false;
       });
     });
   }

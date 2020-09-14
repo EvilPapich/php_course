@@ -584,8 +584,49 @@
         });
       },
       editComment(commentId, message) {
+        fetch("api/post/edit/post/comment", {
+          method: "POST",
+          headers: {
+            [userIdHeader]: this.user.id,
+          },
+          body: JSON.stringify({
+            commentId: commentId,
+            message: message,
+          }),
+        }).then((res) => {
+          if (res.status === 200) {
+            this.getRecentPosts().then((posts) => {
+              this.posts = posts;
+              this.isFetchingPosts = false;
+            });
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
       },
       deleteComment(commentId) {
+        fetch("api/post/delete/post/comment", {
+          method: "POST",
+          headers: {
+            [userIdHeader]: this.user.id,
+          },
+          body: JSON.stringify({
+            commentId: commentId,
+          }),
+        }).then((res) => {
+          if (res.status === 200) {
+            this.getRecentPosts().then((posts) => {
+              this.posts = posts;
+              this.isFetchingPosts = false;
+            });
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
       }
     },
     mounted() {

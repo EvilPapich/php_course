@@ -242,4 +242,50 @@ class PostController
 
     return json_encode([]);
   }
+
+  public function editComment(Request $request) {
+    $userId = $request->header(User::USER_ID_HEADER);
+
+    $author = AuthorService::getAuthorByUserId($userId);
+
+    $body = $request->json();
+
+    $validator = Validator::make($body->all(), [
+      'commentId' => ['required'],
+      'message' => ['required'],
+    ]);
+
+    if ($validator->fails()) {
+      abort(400, $validator->messages());
+    }
+
+    $commentId = $body->get('commentId');
+    $message = $body->get('message');
+
+    PostService::editComment($commentId, $author->id, $message);
+
+    return json_encode([]);
+  }
+
+  public function deleteComment(Request $request) {
+    $userId = $request->header(User::USER_ID_HEADER);
+
+    $author = AuthorService::getAuthorByUserId($userId);
+
+    $body = $request->json();
+
+    $validator = Validator::make($body->all(), [
+      'commentId' => ['required'],
+    ]);
+
+    if ($validator->fails()) {
+      abort(400, $validator->messages());
+    }
+
+    $commentId = $body->get('commentId');
+
+    PostService::deleteComment($commentId, $author->id);
+
+    return json_encode([]);
+  }
 }
