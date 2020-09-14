@@ -18,23 +18,31 @@
             :rows="textareaRows"
         ></textarea>
       </label>
-      <EditButton
+      <IconButton
           v-if="!isEdit"
           :color="'#ccc'"
           :hoverColor="'#4C7DFF'"
           :style="{marginLeft: '10px'}"
           :action="clickToEdit"
-      />
+      >
+        <template slot-scope="props">
+          <EditIcon :color="props.color"/>
+        </template>
+      </IconButton>
       <div
           v-else
           class="comment-item-editor-controls"
       >
-        <DoneButton
+        <IconButton
             :color="'#ccc'"
             :hoverColor="'#4CAF50'"
             :style="{marginLeft: '10px'}"
             :action="clickEditDone"
-        />
+        >
+          <template slot-scope="props">
+            <DoneIcon :color="props.color"/>
+          </template>
+        </IconButton>
       </div>
     </div>
     <div class="comment-item-footer">
@@ -58,11 +66,12 @@
 
 <script>
   import RatingBar from "./RatingBar";
-  import EditButton from "./EditButton";
-  import DoneButton from "./DoneButton";
+  import IconButton from "./IconButton";
+  import EditIcon from "../icons/EditIcon";
+  import DoneIcon from "../icons/DoneIcon";
   export default {
     name: "CommentItem",
-    components: {DoneButton, EditButton, RatingBar},
+    components: {DoneIcon, EditIcon, IconButton, RatingBar},
     props: {
       comment: Object,
       likeAction: {

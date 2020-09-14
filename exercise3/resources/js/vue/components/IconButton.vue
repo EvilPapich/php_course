@@ -1,5 +1,6 @@
 <template>
   <div
+      class="icon-button"
       v-on:mouseover="hover=true"
       v-on:mouseout="hover=false"
       v-on:click="($event) => {
@@ -7,18 +8,13 @@
         action();
       }"
   >
-    <DoneIcon
-        class="done-icon"
-        :color="hover ? hoverColor : color"
-    />
+    <slot :color="hover ? hoverColor : color"/>
   </div>
 </template>
 
 <script>
-  import DoneIcon from "../icons/DoneIcon";
   export default {
-    name: "DoneButton",
-    components: {DoneIcon},
+    name: "IconButton",
     props: {
       color: String,
       hoverColor: String,
@@ -36,7 +32,7 @@
 </script>
 
 <style scoped>
-  .done-icon {
+  .icon-button {
     cursor: pointer;
   }
 </style>
