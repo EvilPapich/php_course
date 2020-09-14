@@ -22,12 +22,13 @@
         />
         <div class="post-view-write-comment-wrapper">
           <label>
-            <input
-                class="post-view-write-comment-input"
-                type="text"
+            <textarea
+                ref="messageTextarea"
+                class="post-view-write-comment-textarea"
                 placeholder="Оставить комментарий..."
+                rows="2"
                 v-model="message"
-            />
+            ></textarea>
           </label>
           <div
               class="post-view-write-comment-submit"
@@ -121,7 +122,7 @@
     display: flex;
     flex: 1;
   }
-  .post-view-write-comment-input {
+  .post-view-write-comment-textarea {
     font-family: 'Nunito', sans-serif;
     display: flex;
     flex: 1;
@@ -131,6 +132,7 @@
     border: none;
     border-radius: 2px;
     outline: none;
+    resize: none;
   }
   .post-view-write-comment-submit {
     padding: 5px 10px;

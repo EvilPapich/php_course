@@ -235,8 +235,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -783,6 +781,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CloseButton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CloseButton */ "./resources/js/vue/components/CloseButton.vue");
 /* harmony import */ var _PostItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PostItem */ "./resources/js/vue/components/PostItem.vue");
 /* harmony import */ var _CommentList__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CommentList */ "./resources/js/vue/components/CommentList.vue");
+//
 //
 //
 //
@@ -1962,7 +1961,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.comment-item[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: column;\n  padding: 15px 20px;\n  background: #f9f9f9;\n  border-radius: 2px;\n  margin-bottom: 5px;\n}\n.comment-item-content[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  margin-right: 5px;\n  margin-bottom: 5px;\n}\n.comment-item-message[data-v-7ae4c9c0] {\n}\n.comment-item-message-input[data-v-7ae4c9c0] {\n  display: flex;\n  flex: 1;\n}\n.comment-item-message-input > textarea[data-v-7ae4c9c0] {\n  font-family: 'Nunito', sans-serif;\n  font-size: 16px;\n  display: flex;\n  flex: 1;\n  padding: 0;\n  color: #636b6f;\n  background: white;\n  border-radius: 2px;\n  border: none;\n  outline: none;\n  resize: none;\n}\n.comment-item-message-input > textarea[data-v-7ae4c9c0]::-moz-placeholder {\n  color: #ccc;\n  font-style: italic;\n}\n.comment-item-message-input > textarea[data-v-7ae4c9c0]:-ms-input-placeholder {\n  color: #ccc;\n  font-style: italic;\n}\n.comment-item-message-input > textarea[data-v-7ae4c9c0]::placeholder {\n  color: #ccc;\n  font-style: italic;\n}\n.comment-item-editor-controls[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: column;\n}\n.comment-item-footer[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n}\n.comment-info[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: row;\n  margin-right: 15px;\n}\n.comment-item-updated-at[data-v-7ae4c9c0] {\n  color: #ccc;\n  margin-right: 15px;\n}\n", ""]);
+exports.push([module.i, "\n.comment-item[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: column;\n  padding: 15px 20px;\n  background: #f9f9f9;\n  border-radius: 2px;\n  margin-bottom: 5px;\n}\n.comment-item-content[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  margin-right: 5px;\n  margin-bottom: 5px;\n}\n.comment-item-message[data-v-7ae4c9c0] {\n  white-space: pre-wrap;\n}\n.comment-item-message-input[data-v-7ae4c9c0] {\n  display: flex;\n  flex: 1;\n}\n.comment-item-message-input > textarea[data-v-7ae4c9c0] {\n  font-family: 'Nunito', sans-serif;\n  font-size: 16px;\n  display: flex;\n  flex: 1;\n  padding: 0;\n  color: #636b6f;\n  background: white;\n  border-radius: 2px;\n  border: none;\n  outline: none;\n  resize: none;\n}\n.comment-item-message-input > textarea[data-v-7ae4c9c0]::-moz-placeholder {\n  color: #ccc;\n  font-style: italic;\n}\n.comment-item-message-input > textarea[data-v-7ae4c9c0]:-ms-input-placeholder {\n  color: #ccc;\n  font-style: italic;\n}\n.comment-item-message-input > textarea[data-v-7ae4c9c0]::placeholder {\n  color: #ccc;\n  font-style: italic;\n}\n.comment-item-editor-controls[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: column;\n}\n.comment-item-footer[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n}\n.comment-info[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: row;\n  margin-right: 15px;\n}\n.comment-item-updated-at[data-v-7ae4c9c0] {\n  color: #ccc;\n  margin-right: 15px;\n}\n", ""]);
 
 // exports
 
@@ -2114,7 +2113,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.post-view[data-v-96a04254] {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  height: calc(100% - (15px*2) - (50px*2));\n  max-width: 600px;\n  background: white;\n  border-radius: 2px;\n  padding: 15px 20px;\n}\n.post-view-header[data-v-96a04254] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n  margin-bottom: 20px;\n}\n.post-view-content[data-v-96a04254] {\n  display: flex;\n  flex-direction: column;\n  flex: 1;\n  overflow: hidden;\n}\n.post-view-write-comment-wrapper[data-v-96a04254] {\n  display: flex;\n  flex-direction: row;\n  padding: 15px 20px;\n  background: #f9f9f9;\n  border-radius: 2px;\n  margin-bottom: 15px;\n}\n.post-view-write-comment-wrapper > label[data-v-96a04254] {\n  display: flex;\n  flex: 1;\n}\n.post-view-write-comment-input[data-v-96a04254] {\n  font-family: 'Nunito', sans-serif;\n  display: flex;\n  flex: 1;\n  padding: 10px;\n  background: #f9f9f9;\n  color: #636b6f;\n  border: none;\n  border-radius: 2px;\n  outline: none;\n}\n.post-view-write-comment-submit[data-v-96a04254] {\n  padding: 5px 10px;\n  margin-left: 20px;\n  border-radius: 2px;\n  color: white;\n  font-weight: unset;\n  display: flex;\n  align-self: center;\n  cursor: pointer;\n  border: none;\n  outline: none;\n  background: #90CAF9;\n}\n.comment-list-scroller[data-v-96a04254] {\n  overflow-y: auto;\n  max-width: 600px;\n  padding: 0 0 0 40px;\n}\n", ""]);
+exports.push([module.i, "\n.post-view[data-v-96a04254] {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  height: calc(100% - (15px*2) - (50px*2));\n  max-width: 600px;\n  background: white;\n  border-radius: 2px;\n  padding: 15px 20px;\n}\n.post-view-header[data-v-96a04254] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n  margin-bottom: 20px;\n}\n.post-view-content[data-v-96a04254] {\n  display: flex;\n  flex-direction: column;\n  flex: 1;\n  overflow: hidden;\n}\n.post-view-write-comment-wrapper[data-v-96a04254] {\n  display: flex;\n  flex-direction: row;\n  padding: 15px 20px;\n  background: #f9f9f9;\n  border-radius: 2px;\n  margin-bottom: 15px;\n}\n.post-view-write-comment-wrapper > label[data-v-96a04254] {\n  display: flex;\n  flex: 1;\n}\n.post-view-write-comment-textarea[data-v-96a04254] {\n  font-family: 'Nunito', sans-serif;\n  display: flex;\n  flex: 1;\n  padding: 10px;\n  background: #f9f9f9;\n  color: #636b6f;\n  border: none;\n  border-radius: 2px;\n  outline: none;\n  resize: none;\n}\n.post-view-write-comment-submit[data-v-96a04254] {\n  padding: 5px 10px;\n  margin-left: 20px;\n  border-radius: 2px;\n  color: white;\n  font-weight: unset;\n  display: flex;\n  align-self: center;\n  cursor: pointer;\n  border: none;\n  outline: none;\n  background: #90CAF9;\n}\n.comment-list-scroller[data-v-96a04254] {\n  overflow-y: auto;\n  max-width: 600px;\n  padding: 0 0 0 40px;\n}\n", ""]);
 
 // exports
 
@@ -20970,7 +20969,7 @@ var render = function() {
           ? _c(
               "div",
               { ref: "messageDiv", staticClass: "comment-item-message" },
-              [_vm._v("\n      " + _vm._s(_vm.comment.message) + "\n    ")]
+              [_vm._v(_vm._s(_vm.comment.message))]
             )
           : _c("label", { staticClass: "comment-item-message-input" }, [
               _c("textarea", {
@@ -21728,7 +21727,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "post-view-write-comment-wrapper" }, [
                   _c("label", [
-                    _c("input", {
+                    _c("textarea", {
                       directives: [
                         {
                           name: "model",
@@ -21737,10 +21736,11 @@ var render = function() {
                           expression: "message"
                         }
                       ],
-                      staticClass: "post-view-write-comment-input",
+                      ref: "messageTextarea",
+                      staticClass: "post-view-write-comment-textarea",
                       attrs: {
-                        type: "text",
-                        placeholder: "Оставить комментарий..."
+                        placeholder: "Оставить комментарий...",
+                        rows: "2"
                       },
                       domProps: { value: _vm.message },
                       on: {

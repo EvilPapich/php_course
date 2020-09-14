@@ -5,9 +5,7 @@
           v-if="!isEdit"
           ref="messageDiv"
           class="comment-item-message"
-      >
-        {{comment.message}}
-      </div>
+      >{{comment.message}}</div>
       <label
           v-else
           class="comment-item-message-input"
@@ -144,6 +142,7 @@
     margin-bottom: 5px;
   }
   .comment-item-message {
+    white-space: pre-wrap;
   }
   .comment-item-message-input {
     display: flex;
