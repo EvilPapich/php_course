@@ -158,6 +158,7 @@
             dislikeAction: (item, value) => rateComment(item.id, value),
           }"
           :editCommentAction="(item, value) => editComment(item.id, value)"
+          :deleteCommentAction="(item) => deleteComment(item.id)"
       />
     </ModalLayout>
   </fragment>
@@ -583,8 +584,9 @@
         });
       },
       editComment(commentId, message) {
-
       },
+      deleteComment(commentId) {
+      }
     },
     mounted() {
       const userId = localStorage.getItem('userId');

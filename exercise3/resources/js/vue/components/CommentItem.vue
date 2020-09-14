@@ -43,6 +43,16 @@
             <DoneIcon :color="props.color"/>
           </template>
         </IconButton>
+        <IconButton
+            :color="'#ccc'"
+            :hoverColor="'#F94B46'"
+            :style="{marginLeft: '10px'}"
+            :action="clickToDelete"
+        >
+          <template slot-scope="props">
+            <TrashIcon :color="props.color"/>
+          </template>
+        </IconButton>
       </div>
     </div>
     <div class="comment-item-footer">
@@ -69,9 +79,10 @@
   import IconButton from "./IconButton";
   import EditIcon from "../icons/EditIcon";
   import DoneIcon from "../icons/DoneIcon";
+  import TrashIcon from "../icons/TrashIcon";
   export default {
     name: "CommentItem",
-    components: {DoneIcon, EditIcon, IconButton, RatingBar},
+    components: {TrashIcon, DoneIcon, EditIcon, IconButton, RatingBar},
     props: {
       comment: Object,
       likeAction: {
@@ -83,6 +94,10 @@
         type: Function,
       },
       editAction: {
+        default: ()=>{},
+        type: Function,
+      },
+      deleteAction: {
         default: ()=>{},
         type: Function,
       },
@@ -102,6 +117,10 @@
       },
       clickEditDone() {
         this.editAction(this.comment, this.message);
+        this.isEdit = false;
+      },
+      clickToDelete() {
+        this.deleteAction(this.comment);
         this.isEdit = false;
       },
     },

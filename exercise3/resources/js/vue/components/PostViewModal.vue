@@ -44,6 +44,7 @@
                 dislikeAction: rateCommentAction.dislikeAction,
               }"
               :editAction="editCommentAction"
+              :deleteAction="deleteCommentAction"
           />
         </div>
       </fragment>
@@ -68,6 +69,7 @@
       commentWriteAction: Function,
       rateCommentAction: Object,
       editCommentAction: Function,
+      deleteCommentAction: Function,
     },
     data() {
       return {

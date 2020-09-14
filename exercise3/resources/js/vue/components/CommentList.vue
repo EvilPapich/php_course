@@ -7,6 +7,7 @@
         :likeAction="rateAction.likeAction"
         :dislikeAction="rateAction.dislikeAction"
         :editAction="editAction"
+        :deleteAction="deleteAction"
     />
   </div>
 </template>
@@ -23,6 +24,7 @@
         type: Object,
       },
       editAction: Function,
+      deleteAction: Function,
     }
   }
 </script>
