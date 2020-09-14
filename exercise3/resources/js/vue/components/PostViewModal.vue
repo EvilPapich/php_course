@@ -21,6 +21,19 @@
             }"
         />
         <div class="post-view-write-comment-wrapper">
+          <div
+              v-if="refId"
+              class="post-view-write-comment-ref-wrapper"
+          >
+            <ReferIcon :color="'#4C7DFF'"/>
+            <div
+                class="post-view-write-comment-ref"
+                v-on:click="clickCommentRefId"
+            >
+              {{refId}}
+              <span>x</span>
+            </div>
+          </div>
           <label>
             <textarea
                 ref="messageTextarea"
@@ -32,18 +45,20 @@
           </label>
           <div
               class="post-view-write-comment-submit"
-              v-on:click="() => clickCommentSubmit(null)"
+              v-on:click="clickCommentSubmit"
           >
             Отправить
           </div>
         </div>
         <div class="comment-list-scroller">
           <CommentItem
+              v-if="post.popular_comment[0]"
               :comment="post.popular_comment[0]"
               :likeAction="rateCommentAction.likeAction"
               :dislikeAction="rateCommentAction.dislikeAction"
               :editAction="editCommentAction"
               :deleteAction="deleteCommentAction"
+              :refAction="(item) => commentRefAction(item.id)"
               :style="{border: '1px solid #CAD9FF'}"
           />
           <CommentList
@@ -54,6 +69,7 @@
               }"
               :editAction="editCommentAction"
               :deleteAction="deleteCommentAction"
+              :refAction="(item) => commentRefAction(item.id)"
           />
         </div>
       </fragment>
@@ -69,9 +85,10 @@
   import PostItem from "./PostItem";
   import CommentList from "./CommentList";
   import CommentItem from "./CommentItem";
+  import ReferIcon from "../icons/ReferIcon";
   export default {
     name: "PostViewModal",
-    components: {CommentItem, CommentList, PostItem, CloseButton},
+    components: {ReferIcon, CommentItem, CommentList, PostItem, CloseButton},
     props: {
       post: Object,
       closePostView: Function,
@@ -84,12 +101,20 @@
     data() {
       return {
         message: "",
+        refId: undefined,
       }
     },
     methods: {
-      clickCommentSubmit(commentId) {
-        this.commentWriteAction(this.post.id, this.message, commentId);
+      clickCommentSubmit() {
+        this.commentWriteAction(this.post.id, this.message, this.refId);
         this.message = "";
+        this.refId = undefined;
+      },
+      commentRefAction(commentId) {
+        this.refId = commentId;
+      },
+      clickCommentRefId() {
+        this.refId = undefined;
       }
     }
   }
@@ -130,6 +155,31 @@
   .post-view-write-comment-wrapper > label {
     display: flex;
     flex: 1;
+  }
+  .post-view-write-comment-ref-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding-top: 7.5px;
+    margin-right: 5px;
+  }
+  .post-view-write-comment-ref {
+    display: flex;
+    align-self: flex-start;
+    padding: 2px 8px;
+    border-radius: 24px;
+    background: #eee;
+    font-size: 12px;
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  .post-view-write-comment-ref:hover {
+    background: #4c7dff;
+  }
+  .post-view-write-comment-ref > span {
+    margin-left: 5px;
+  }
+  .post-view-write-comment-ref:hover > span {
+    color: white;
   }
   .post-view-write-comment-textarea {
     font-family: 'Nunito', sans-serif;

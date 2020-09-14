@@ -64,8 +64,10 @@ class PostService
                 $query->where('value', '=', 0);
               },
             ])
+            ->whereNull('reference_id')
+            ->groupBy('id')
             ->orderBy('likes', 'desc')
-            ->first();
+            ->orderBy('updated_at', 'desc');
         },
         'popularComment.author' => function() {},
       ])

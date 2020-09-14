@@ -69,7 +69,8 @@ class Post extends Model
   }
 
   public function comments() {
-    return $this->belongsToMany('App\Models\Comment', 'post_comments');
+    return $this->belongsToMany('App\Models\Comment', 'post_comments')
+      ->withPivot('reference_id');
   }
 
   public function popularComment() {

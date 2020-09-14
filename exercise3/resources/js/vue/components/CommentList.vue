@@ -8,6 +8,7 @@
         :dislikeAction="rateAction.dislikeAction"
         :editAction="editAction"
         :deleteAction="deleteAction"
+        :refAction="refAction"
     />
   </div>
 </template>
@@ -25,6 +26,7 @@
       },
       editAction: Function,
       deleteAction: Function,
+      refAction: Function,
     }
   }
 </script>

@@ -16,17 +16,31 @@
             :rows="textareaRows"
         ></textarea>
       </label>
-      <IconButton
+      <div
           v-if="!isEdit"
-          :color="'#ccc'"
-          :hoverColor="'#4C7DFF'"
-          :style="{marginLeft: '10px'}"
-          :action="clickToEdit"
+          class="comment-item-controls"
       >
-        <template slot-scope="props">
-          <EditIcon :color="props.color"/>
-        </template>
-      </IconButton>
+        <IconButton
+            :color="'#ccc'"
+            :hoverColor="'#4C7DFF'"
+            :style="{marginLeft: '10px'}"
+            :action="clickToEdit"
+        >
+          <template slot-scope="props">
+            <EditIcon :color="props.color"/>
+          </template>
+        </IconButton>
+        <IconButton
+            :color="'#ccc'"
+            :hoverColor="'#4C7DFF'"
+            :style="{marginLeft: '10px'}"
+            :action="() => refAction(comment)"
+        >
+          <template slot-scope="props">
+            <ReferIcon :color="props.color"/>
+          </template>
+        </IconButton>
+      </div>
       <div
           v-else
           class="comment-item-editor-controls"
@@ -78,9 +92,10 @@
   import EditIcon from "../icons/EditIcon";
   import DoneIcon from "../icons/DoneIcon";
   import TrashIcon from "../icons/TrashIcon";
+  import ReferIcon from "../icons/ReferIcon";
   export default {
     name: "CommentItem",
-    components: {TrashIcon, DoneIcon, EditIcon, IconButton, RatingBar},
+    components: {ReferIcon, TrashIcon, DoneIcon, EditIcon, IconButton, RatingBar},
     props: {
       comment: Object,
       likeAction: {
@@ -96,6 +111,10 @@
         type: Function,
       },
       deleteAction: {
+        default: ()=>{},
+        type: Function,
+      },
+      refAction: {
         default: ()=>{},
         type: Function,
       },
@@ -164,6 +183,10 @@
   .comment-item-message-input > textarea::placeholder {
     color: #ccc;
     font-style: italic;
+  }
+  .comment-item-controls {
+    display: flex;
+    flex-direction: column;
   }
   .comment-item-editor-controls {
     display: flex;
