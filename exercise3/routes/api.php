@@ -41,5 +41,6 @@ Route::middleware('app.auth')->group(function () {
     Route::post('/delete/draft', 'PostController@deleteDraft');
     Route::post('/rate/post', 'PostController@ratePost');
     Route::post('/write/post/comment', 'PostController@writeComment');
+    Route::post('/rate/post/comment', 'PostController@rateComment');
   });
 });

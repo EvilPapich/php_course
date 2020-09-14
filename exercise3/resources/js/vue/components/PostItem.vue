@@ -8,24 +8,12 @@
       <div class="post-item-title">
         {{ post.title }}
       </div>
-      <div class="post-item-rating">
-        <LikeCounter
-            v-if="post.likes !== undefined"
-            :count="post.likes"
-            :color="post.likes ? '#4CAF50' : '#ccc'"
-            :hoverColor="'#4C7DFF'"
-            :orientation="'top'"
-            :action="() => likeAction(post)"
-        />
-        <LikeCounter
-            v-if="post.dislikes !== undefined"
-            :count="post.dislikes"
-            :color="post.dislikes ? '#F94B46' : '#ccc'"
-            :hoverColor="'#4C7DFF'"
-            :orientation="'bottom'"
-            :action="() => dislikeAction(post)"
-        />
-      </div>
+      <RatingBar
+          :likes="post.likes"
+          :likeAction="(value) => likeAction(post, value)"
+          :dislikes="post.dislikes"
+          :dislikeAction="(value) => dislikeAction(post, value)"
+      />
     </div>
     <div
         class="post-item-text"
@@ -63,9 +51,10 @@
 <script>
   import LikeCounter from "./LikeCounter";
   import overflowText from "../utils/overflowText";
+  import RatingBar from "./RatingBar";
   export default {
     name: "PostItem",
-    components: {LikeCounter},
+    components: {RatingBar, LikeCounter},
     props: {
       post: Object,
       needOverflowText: Boolean,
@@ -120,10 +109,6 @@
   }
   .post-item-title {
     font-weight: 600;
-  }
-  .post-item-rating {
-    display: flex;
-    flex-direction: row;
   }
   .post-item-text {
     margin-bottom: 15px;

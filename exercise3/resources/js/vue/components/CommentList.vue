@@ -4,6 +4,8 @@
         v-for="(comment, index) in comments"
         :key="index"
         :comment="comment"
+        :likeAction="rateAction.likeAction"
+        :dislikeAction="rateAction.dislikeAction"
     />
   </div>
 </template>
@@ -15,6 +17,10 @@
     components: {CommentItem},
     props: {
       comments: Array,
+      rateAction: {
+        default: () => ({}),
+        type: Object,
+      },
     }
   }
 </script>

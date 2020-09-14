@@ -12,15 +12,31 @@
           {{comment.author[0].lname}} {{comment.author[0].fname}}
         </div>
       </div>
+      <RatingBar
+          :likes="comment.likes"
+          :likeAction="(value) => likeAction(comment, value)"
+          :dislikes="comment.dislikes"
+          :dislikeAction="(value) => dislikeAction(comment, value)"
+      />
     </div>
   </div>
 </template>
 
 <script>
+  import RatingBar from "./RatingBar";
   export default {
     name: "CommentItem",
+    components: {RatingBar},
     props: {
       comment: Object,
+      likeAction: {
+        default: ()=>{},
+        type: Function,
+      },
+      dislikeAction: {
+        default: ()=>{},
+        type: Function,
+      },
     }
   }
 </script>
@@ -42,6 +58,7 @@
   .comment-info {
     display: flex;
     flex-direction: row;
+    margin-right: 15px;
   }
   .comment-item-updated-at {
     color: #ccc;

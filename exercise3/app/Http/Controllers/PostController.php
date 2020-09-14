@@ -218,4 +218,28 @@ class PostController
 
     return json_encode([]);
   }
+
+  public function rateComment(Request $request) {
+    $userId = $request->header(User::USER_ID_HEADER);
+
+    $author = AuthorService::getAuthorByUserId($userId);
+
+    $body = $request->json();
+
+    $validator = Validator::make($body->all(), [
+      'commentId' => ['required'],
+      'value' => ['required', 'in:0,1'],
+    ]);
+
+    if ($validator->fails()) {
+      abort(400, $validator->messages());
+    }
+
+    $commentId = $body->get('commentId');
+    $value = $body->get('value');
+
+    PostService::rateComment($commentId, $author->id, $value);
+
+    return json_encode([]);
+  }
 }

@@ -82,8 +82,10 @@
                   :posts="posts"
                   :needOverflowText="true"
                   :action="(item) => openPostView(item)"
-                  :likeAction="(item) => ratePost(item.id, 1)"
-                  :dislikeAction="(item) => ratePost(item.id, 0)"
+                  :rateAction="{
+                    likeAction: (item, value) => ratePost(item.id, value),
+                    dislikeAction: (item, value) => ratePost(item.id, value),
+                  }"
                   :tagAction="(item) => clickTag(item)"
               />
               <div v-else class="post-list-loading">
@@ -146,9 +148,15 @@
       <PostViewModal
           :post="post"
           :closePostView="closePostView"
-          :likeAction="(item) => ratePost(item.id, 1)"
-          :dislikeAction="(item) => ratePost(item.id, 0)"
-          :commentAction="(postId, message, commentId) => writeComment(postId, message, commentId)"
+          :ratePostAction="{
+            likeAction: (item, value) => ratePost(item.id, value),
+            dislikeAction: (item, value) => ratePost(item.id, value),
+          }"
+          :commentWriteAction="(postId, message, commentId) => writeComment(postId, message, commentId)"
+          :rateCommentAction="{
+            likeAction: (item, value) => rateComment(item.id, value),
+            dislikeAction: (item, value) => rateComment(item.id, value),
+          }"
       />
     </ModalLayout>
   </fragment>
@@ -549,7 +557,30 @@
         }).catch((err) => {
           alert(err.message);
         });
-      }
+      },
+      rateComment(commentId, value) {
+        fetch("api/post/rate/post/comment", {
+          method: "POST",
+          headers: {
+            [userIdHeader]: this.user.id,
+          },
+          body: JSON.stringify({
+            commentId: commentId,
+            value: value,
+          }),
+        }).then((res) => {
+          if (res.status === 200) {
+            this.getRecentPosts().then((posts) => {
+              this.posts = posts;
+              this.isFetchingPosts = false;
+            });
+          } else {
+            throw new Error(res.statusText);
+          }
+        }).catch((err) => {
+          alert(err.message);
+        });
+      },
     },
     mounted() {
       const userId = localStorage.getItem('userId');

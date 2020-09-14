@@ -44,7 +44,15 @@ class PostService
         'author' => function() {},
         'tags' => function() {},
         'comments' => function (BelongsToMany $query) {
-          $query->orderBy('updated_at', 'desc');
+          $query->withCount([
+              'opinions as likes' => function (Builder $query) {
+                $query->where('value', '=', 1);
+              },
+              'opinions as dislikes' => function (Builder $query) {
+                $query->where('value', '=', 0);
+              },
+            ])
+            ->orderBy('updated_at', 'desc');
         },
         'comments.author' => function () {},
       ])
@@ -231,5 +239,30 @@ class PostService
     ]);
 
     $post->save();
+  }
+
+  public static function rateComment(Int $commentId, Int $authorId, Int $value) {
+    $comment = Comment::where([
+      ['id', $commentId],
+    ])->firstOrFail();
+
+    $opinion = collect(
+      $comment->opinions()->wherePivot('author_id', $authorId)->get()
+    );
+
+    if (
+      $opinion->count() === 1
+      && $opinion->first()->pivot->value === $value
+    ) {
+      $comment->opinions()->detach($authorId);
+    } else if (
+      $opinion->count() === 1
+    ) {
+      $comment->opinions()->updateExistingPivot($authorId, ['value' => $value]);
+    } else {
+      $comment->opinions()->attach($authorId, ['value' => $value]);
+    }
+
+    $comment->save();
   }
 }

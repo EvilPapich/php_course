@@ -6,8 +6,8 @@
         :post="post"
         :needOverflowText="needOverflowText"
         :action="() => action(post)"
-        :likeAction="likeAction"
-        :dislikeAction="dislikeAction"
+        :likeAction="rateAction.likeAction"
+        :dislikeAction="rateAction.dislikeAction"
         :tagAction="tagAction"
     />
   </div>
@@ -25,8 +25,10 @@
       posts: Array,
       needOverflowText: Boolean,
       action: Function,
-      likeAction: Function,
-      dislikeAction: Function,
+      rateAction: {
+        default: () => ({}),
+        type: Object,
+      },
       tagAction: Function,
     },
     methods: {

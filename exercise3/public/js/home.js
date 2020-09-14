@@ -156,6 +156,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _RatingBar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RatingBar */ "./resources/js/vue/components/RatingBar.vue");
 //
 //
 //
@@ -174,10 +175,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CommentItem",
+  components: {
+    RatingBar: _RatingBar__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   props: {
-    comment: Object
+    comment: Object,
+    likeAction: {
+      "default": function _default() {},
+      type: Function
+    },
+    dislikeAction: {
+      "default": function _default() {},
+      type: Function
+    }
   }
 });
 
@@ -203,6 +222,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CommentList",
@@ -210,7 +231,13 @@ __webpack_require__.r(__webpack_exports__);
     CommentItem: _CommentItem__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: {
-    comments: Array
+    comments: Array,
+    rateAction: {
+      "default": function _default() {
+        return {};
+      },
+      type: Object
+    }
   }
 });
 
@@ -453,6 +480,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LikeCounter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LikeCounter */ "./resources/js/vue/components/LikeCounter.vue");
 /* harmony import */ var _utils_overflowText__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/overflowText */ "./resources/js/vue/utils/overflowText.js");
+/* harmony import */ var _RatingBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RatingBar */ "./resources/js/vue/components/RatingBar.vue");
 //
 //
 //
@@ -503,23 +531,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PostItem",
   components: {
+    RatingBar: _RatingBar__WEBPACK_IMPORTED_MODULE_2__["default"],
     LikeCounter: _LikeCounter__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: {
@@ -598,8 +616,12 @@ __webpack_require__.r(__webpack_exports__);
     posts: Array,
     needOverflowText: Boolean,
     action: Function,
-    likeAction: Function,
-    dislikeAction: Function,
+    rateAction: {
+      "default": function _default() {
+        return {};
+      },
+      type: Object
+    },
     tagAction: Function
   },
   methods: {
@@ -672,6 +694,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -685,9 +711,9 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     post: Object,
     closePostView: Function,
-    likeAction: Function,
-    dislikeAction: Function,
-    commentAction: Function
+    ratePostAction: Object,
+    commentWriteAction: Function,
+    rateCommentAction: Object
   },
   data: function data() {
     return {
@@ -696,8 +722,61 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     clickCommentSubmit: function clickCommentSubmit(commentId) {
-      this.commentAction(this.post.id, this.message, commentId);
+      this.commentWriteAction(this.post.id, this.message, commentId);
       this.message = "";
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/vue/components/RatingBar.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/vue/components/RatingBar.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _LikeCounter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LikeCounter */ "./resources/js/vue/components/LikeCounter.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "RatingBar",
+  components: {
+    LikeCounter: _LikeCounter__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  props: {
+    likes: Number,
+    likeAction: {
+      "default": function _default() {},
+      type: Function
+    },
+    dislikes: Number,
+    dislikeAction: {
+      "default": function _default() {},
+      type: Function
     }
   }
 });
@@ -891,6 +970,14 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1455,24 +1542,47 @@ var userIdHeader = 'x-user-id';
       })["catch"](function (err) {
         alert(err.message);
       });
+    },
+    rateComment: function rateComment(commentId, value) {
+      var _this11 = this;
+
+      fetch("api/post/rate/post/comment", {
+        method: "POST",
+        headers: _defineProperty({}, userIdHeader, this.user.id),
+        body: JSON.stringify({
+          commentId: commentId,
+          value: value
+        })
+      }).then(function (res) {
+        if (res.status === 200) {
+          _this11.getRecentPosts().then(function (posts) {
+            _this11.posts = posts;
+            _this11.isFetchingPosts = false;
+          });
+        } else {
+          throw new Error(res.statusText);
+        }
+      })["catch"](function (err) {
+        alert(err.message);
+      });
     }
   },
   mounted: function mounted() {
-    var _this11 = this;
+    var _this12 = this;
 
     var userId = localStorage.getItem('userId');
     this.fetchAuthor(userId).then(function (author) {
-      _this11.author = author;
-      _this11.user = author.user;
+      _this12.author = author;
+      _this12.user = author.user;
     }).then(function () {
-      _this11.getDrafts().then(function (drafts) {
-        _this11.drafts = drafts;
-        _this11.isFetchingDrafts = false;
+      _this12.getDrafts().then(function (drafts) {
+        _this12.drafts = drafts;
+        _this12.isFetchingDrafts = false;
       });
 
-      _this11.getRecentPosts().then(function (posts) {
-        _this11.posts = posts;
-        _this11.isFetchingPosts = false;
+      _this12.getRecentPosts().then(function (posts) {
+        _this12.posts = posts;
+        _this12.isFetchingPosts = false;
       });
     });
   }
@@ -1530,7 +1640,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.comment-item[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: column;\n  padding: 15px 20px;\n  background: #f9f9f9;\n  border-radius: 2px;\n  margin-bottom: 5px;\n}\n.comment-item-footer[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n}\n.comment-info[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: row;\n}\n.comment-item-updated-at[data-v-7ae4c9c0] {\n  color: #ccc;\n  margin-right: 15px;\n}\n", ""]);
+exports.push([module.i, "\n.comment-item[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: column;\n  padding: 15px 20px;\n  background: #f9f9f9;\n  border-radius: 2px;\n  margin-bottom: 5px;\n}\n.comment-item-footer[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n}\n.comment-info[data-v-7ae4c9c0] {\n  display: flex;\n  flex-direction: row;\n  margin-right: 15px;\n}\n.comment-item-updated-at[data-v-7ae4c9c0] {\n  color: #ccc;\n  margin-right: 15px;\n}\n", ""]);
 
 // exports
 
@@ -1625,7 +1735,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.post-item[data-v-45a1c135],\n.post-item-no-hover[data-v-45a1c135] {\n  display: flex;\n  flex-direction: column;\n  margin-top: 20px;\n  background: #f9f9f9;\n  border-radius: 2px;\n  padding: 15px 20px;\n}\n.post-item[data-v-45a1c135]:hover {\n  background: #cad9ff;\n  cursor: pointer;\n}\n.post-item-header[data-v-45a1c135] {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  margin-bottom: 15px;\n}\n.post-item-title[data-v-45a1c135] {\n  font-weight: 600;\n}\n.post-item-rating[data-v-45a1c135] {\n  display: flex;\n  flex-direction: row;\n}\n.post-item-text[data-v-45a1c135] {\n  margin-bottom: 15px;\n  white-space: pre-wrap;\n}\n.post-item-footer[data-v-45a1c135] {\n  display: flex;\n  flex-direction: column;\n}\n.post-info[data-v-45a1c135],\n.post-tags-list[data-v-45a1c135]\n{\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n}\n.post-tags-list[data-v-45a1c135] {\n  margin-bottom: 5px;\n}\n.tag-item[data-v-45a1c135] {\n  display: flex;\n  align-self: flex-start;\n  padding: 2px 8px;\n  border-radius: 24px;\n  background: #eee;\n  font-size: 12px;\n  margin-left: 10px;\n}\n.post-item:hover > .post-item-footer > .post-tags-list > .tag-item[data-v-45a1c135] {\n  background: #eeeeee5c;\n}\n.tag-item[data-v-45a1c135]:hover,\n.post-item:hover > .post-item-footer > .post-tags-list > .tag-item[data-v-45a1c135]:hover {\n  background: #4c7dff;\n  color: white;\n}\n.post-item-status[data-v-45a1c135] {\n  margin-right: 15px;\n}\n.post-item-updated-at[data-v-45a1c135] {\n  color: #ccc;\n  margin-right: 15px;\n}\n.post-item:hover > .post-item-footer > .post-info > .post-item-updated-at[data-v-45a1c135] {\n  color: #aaa;\n}\n.post-item-author[data-v-45a1c135] {\n}\n", ""]);
+exports.push([module.i, "\n.post-item[data-v-45a1c135],\n.post-item-no-hover[data-v-45a1c135] {\n  display: flex;\n  flex-direction: column;\n  margin-top: 20px;\n  background: #f9f9f9;\n  border-radius: 2px;\n  padding: 15px 20px;\n}\n.post-item[data-v-45a1c135]:hover {\n  background: #cad9ff;\n  cursor: pointer;\n}\n.post-item-header[data-v-45a1c135] {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  margin-bottom: 15px;\n}\n.post-item-title[data-v-45a1c135] {\n  font-weight: 600;\n}\n.post-item-text[data-v-45a1c135] {\n  margin-bottom: 15px;\n  white-space: pre-wrap;\n}\n.post-item-footer[data-v-45a1c135] {\n  display: flex;\n  flex-direction: column;\n}\n.post-info[data-v-45a1c135],\n.post-tags-list[data-v-45a1c135]\n{\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n}\n.post-tags-list[data-v-45a1c135] {\n  margin-bottom: 5px;\n}\n.tag-item[data-v-45a1c135] {\n  display: flex;\n  align-self: flex-start;\n  padding: 2px 8px;\n  border-radius: 24px;\n  background: #eee;\n  font-size: 12px;\n  margin-left: 10px;\n}\n.post-item:hover > .post-item-footer > .post-tags-list > .tag-item[data-v-45a1c135] {\n  background: #eeeeee5c;\n}\n.tag-item[data-v-45a1c135]:hover,\n.post-item:hover > .post-item-footer > .post-tags-list > .tag-item[data-v-45a1c135]:hover {\n  background: #4c7dff;\n  color: white;\n}\n.post-item-status[data-v-45a1c135] {\n  margin-right: 15px;\n}\n.post-item-updated-at[data-v-45a1c135] {\n  color: #ccc;\n  margin-right: 15px;\n}\n.post-item:hover > .post-item-footer > .post-info > .post-item-updated-at[data-v-45a1c135] {\n  color: #aaa;\n}\n.post-item-author[data-v-45a1c135] {\n}\n", ""]);
 
 // exports
 
@@ -1664,6 +1774,25 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 // module
 exports.push([module.i, "\n.post-view[data-v-96a04254] {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  height: calc(100% - (15px*2) - (50px*2));\n  max-width: 600px;\n  background: white;\n  border-radius: 2px;\n  padding: 15px 20px;\n}\n.post-view-header[data-v-96a04254] {\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-end;\n  margin-bottom: 20px;\n}\n.post-view-content[data-v-96a04254] {\n  display: flex;\n  flex-direction: column;\n  flex: 1;\n  overflow: hidden;\n}\n.post-view-write-comment-wrapper[data-v-96a04254] {\n  display: flex;\n  flex-direction: row;\n  padding: 15px 20px;\n  background: #f9f9f9;\n  border-radius: 2px;\n  margin-bottom: 15px;\n}\n.post-view-write-comment-wrapper > label[data-v-96a04254] {\n  display: flex;\n  flex: 1;\n}\n.post-view-write-comment-input[data-v-96a04254] {\n  font-family: 'Nunito', sans-serif;\n  display: flex;\n  flex: 1;\n  padding: 10px;\n  background: #f9f9f9;\n  color: #636b6f;\n  border: none;\n  border-radius: 2px;\n  outline: none;\n}\n.post-view-write-comment-submit[data-v-96a04254] {\n  padding: 5px 10px;\n  margin-left: 20px;\n  border-radius: 2px;\n  color: white;\n  font-weight: unset;\n  display: flex;\n  align-self: center;\n  cursor: pointer;\n  border: none;\n  outline: none;\n  background: #90CAF9;\n}\n.comment-list-scroller[data-v-96a04254] {\n  overflow-y: auto;\n  max-width: 600px;\n  padding: 0 0 0 40px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/vue/components/RatingBar.vue?vue&type=style&index=0&id=5e7f6c78&scoped=true&lang=css&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/vue/components/RatingBar.vue?vue&type=style&index=0&id=5e7f6c78&scoped=true&lang=css& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.rating-bar[data-v-5e7f6c78] {\n  display: flex;\n  flex-direction: row;\n}\n", ""]);
 
 // exports
 
@@ -19672,6 +19801,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/vue/components/RatingBar.vue?vue&type=style&index=0&id=5e7f6c78&scoped=true&lang=css&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/vue/components/RatingBar.vue?vue&type=style&index=0&id=5e7f6c78&scoped=true&lang=css& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./RatingBar.vue?vue&type=style&index=0&id=5e7f6c78&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/vue/components/RatingBar.vue?vue&type=style&index=0&id=5e7f6c78&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/vue/components/WideButton.vue?vue&type=style&index=0&id=ab014472&scoped=true&lang=css&":
 /*!************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/vue/components/WideButton.vue?vue&type=style&index=0&id=ab014472&scoped=true&lang=css& ***!
@@ -20436,23 +20595,41 @@ var render = function() {
       _vm._v("\n    " + _vm._s(_vm.comment.message) + "\n  ")
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "comment-item-footer" }, [
-      _c("div", { staticClass: "comment-info" }, [
-        _c("div", { staticClass: "comment-item-updated-at" }, [
-          _vm._v("\n        " + _vm._s(_vm.comment.updated_at) + "\n      ")
+    _c(
+      "div",
+      { staticClass: "comment-item-footer" },
+      [
+        _c("div", { staticClass: "comment-info" }, [
+          _c("div", { staticClass: "comment-item-updated-at" }, [
+            _vm._v("\n        " + _vm._s(_vm.comment.updated_at) + "\n      ")
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _vm._v(
+              "\n        " +
+                _vm._s(_vm.comment.author[0].lname) +
+                " " +
+                _vm._s(_vm.comment.author[0].fname) +
+                "\n      "
+            )
+          ])
         ]),
         _vm._v(" "),
-        _c("div", [
-          _vm._v(
-            "\n        " +
-              _vm._s(_vm.comment.author[0].lname) +
-              " " +
-              _vm._s(_vm.comment.author[0].fname) +
-              "\n      "
-          )
-        ])
-      ])
-    ])
+        _c("RatingBar", {
+          attrs: {
+            likes: _vm.comment.likes,
+            likeAction: function(value) {
+              return _vm.likeAction(_vm.comment, value)
+            },
+            dislikes: _vm.comment.dislikes,
+            dislikeAction: function(value) {
+              return _vm.dislikeAction(_vm.comment, value)
+            }
+          }
+        })
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -20481,7 +20658,14 @@ var render = function() {
     "div",
     { staticClass: "comment-list" },
     _vm._l(_vm.comments, function(comment, index) {
-      return _c("CommentItem", { key: index, attrs: { comment: comment } })
+      return _c("CommentItem", {
+        key: index,
+        attrs: {
+          comment: comment,
+          likeAction: _vm.rateAction.likeAction,
+          dislikeAction: _vm.rateAction.dislikeAction
+        }
+      })
     }),
     1
   )
@@ -20840,46 +21024,29 @@ var render = function() {
       }
     },
     [
-      _c("div", { staticClass: "post-item-header" }, [
-        _c("div", { staticClass: "post-item-title" }, [
-          _vm._v("\n      " + _vm._s(_vm.post.title) + "\n    ")
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "post-item-rating" },
-          [
-            _vm.post.likes !== undefined
-              ? _c("LikeCounter", {
-                  attrs: {
-                    count: _vm.post.likes,
-                    color: _vm.post.likes ? "#4CAF50" : "#ccc",
-                    hoverColor: "#4C7DFF",
-                    orientation: "top",
-                    action: function() {
-                      return _vm.likeAction(_vm.post)
-                    }
-                  }
-                })
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.post.dislikes !== undefined
-              ? _c("LikeCounter", {
-                  attrs: {
-                    count: _vm.post.dislikes,
-                    color: _vm.post.dislikes ? "#F94B46" : "#ccc",
-                    hoverColor: "#4C7DFF",
-                    orientation: "bottom",
-                    action: function() {
-                      return _vm.dislikeAction(_vm.post)
-                    }
-                  }
-                })
-              : _vm._e()
-          ],
-          1
-        )
-      ]),
+      _c(
+        "div",
+        { staticClass: "post-item-header" },
+        [
+          _c("div", { staticClass: "post-item-title" }, [
+            _vm._v("\n      " + _vm._s(_vm.post.title) + "\n    ")
+          ]),
+          _vm._v(" "),
+          _c("RatingBar", {
+            attrs: {
+              likes: _vm.post.likes,
+              likeAction: function(value) {
+                return _vm.likeAction(_vm.post, value)
+              },
+              dislikes: _vm.post.dislikes,
+              dislikeAction: function(value) {
+                return _vm.dislikeAction(_vm.post, value)
+              }
+            }
+          })
+        ],
+        1
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -20975,8 +21142,8 @@ var render = function() {
           action: function() {
             return _vm.action(post)
           },
-          likeAction: _vm.likeAction,
-          dislikeAction: _vm.dislikeAction,
+          likeAction: _vm.rateAction.likeAction,
+          dislikeAction: _vm.rateAction.dislikeAction,
           tagAction: _vm.tagAction
         }
       })
@@ -21029,8 +21196,8 @@ var render = function() {
                   attrs: {
                     post: _vm.post,
                     needOverflowText: false,
-                    likeAction: _vm.likeAction,
-                    dislikeAction: _vm.dislikeAction,
+                    likeAction: _vm.ratePostAction.likeAction,
+                    dislikeAction: _vm.ratePostAction.dislikeAction,
                     styles: {
                       //postItem: {flex: 1},
                       //postItemText: {flex: 1},
@@ -21086,7 +21253,13 @@ var render = function() {
                   { staticClass: "comment-list-scroller" },
                   [
                     _c("CommentList", {
-                      attrs: { comments: _vm.post.comments }
+                      attrs: {
+                        comments: _vm.post.comments,
+                        rateAction: {
+                          likeAction: _vm.rateCommentAction.likeAction,
+                          dislikeAction: _vm.rateCommentAction.dislikeAction
+                        }
+                      }
                     })
                   ],
                   1
@@ -21099,6 +21272,63 @@ var render = function() {
       1
     )
   ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/vue/components/RatingBar.vue?vue&type=template&id=5e7f6c78&scoped=true&":
+/*!****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/vue/components/RatingBar.vue?vue&type=template&id=5e7f6c78&scoped=true& ***!
+  \****************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "rating-bar" },
+    [
+      _vm.likes !== undefined
+        ? _c("LikeCounter", {
+            attrs: {
+              count: _vm.likes,
+              color: _vm.likes ? "#4CAF50" : "#ccc",
+              hoverColor: "#4C7DFF",
+              orientation: "top",
+              action: function() {
+                return _vm.likeAction(1)
+              }
+            }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.dislikes !== undefined
+        ? _c("LikeCounter", {
+            attrs: {
+              count: _vm.dislikes,
+              color: _vm.dislikes ? "#F94B46" : "#ccc",
+              hoverColor: "#4C7DFF",
+              orientation: "bottom",
+              action: function() {
+                return _vm.dislikeAction(0)
+              }
+            }
+          })
+        : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -21531,11 +21761,13 @@ var render = function() {
                               action: function(item) {
                                 return _vm.openPostView(item)
                               },
-                              likeAction: function(item) {
-                                return _vm.ratePost(item.id, 1)
-                              },
-                              dislikeAction: function(item) {
-                                return _vm.ratePost(item.id, 0)
+                              rateAction: {
+                                likeAction: function(item, value) {
+                                  return _vm.ratePost(item.id, value)
+                                },
+                                dislikeAction: function(item, value) {
+                                  return _vm.ratePost(item.id, value)
+                                }
                               },
                               tagAction: function(item) {
                                 return _vm.clickTag(item)
@@ -21635,14 +21867,24 @@ var render = function() {
                 attrs: {
                   post: _vm.post,
                   closePostView: _vm.closePostView,
-                  likeAction: function(item) {
-                    return _vm.ratePost(item.id, 1)
+                  ratePostAction: {
+                    likeAction: function(item, value) {
+                      return _vm.ratePost(item.id, value)
+                    },
+                    dislikeAction: function(item, value) {
+                      return _vm.ratePost(item.id, value)
+                    }
                   },
-                  dislikeAction: function(item) {
-                    return _vm.ratePost(item.id, 0)
-                  },
-                  commentAction: function(postId, message, commentId) {
+                  commentWriteAction: function(postId, message, commentId) {
                     return _vm.writeComment(postId, message, commentId)
+                  },
+                  rateCommentAction: {
+                    likeAction: function(item, value) {
+                      return _vm.rateComment(item.id, value)
+                    },
+                    dislikeAction: function(item, value) {
+                      return _vm.rateComment(item.id, value)
+                    }
                   }
                 }
               })
@@ -34712,6 +34954,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostViewModal_vue_vue_type_template_id_96a04254_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostViewModal_vue_vue_type_template_id_96a04254_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/vue/components/RatingBar.vue":
+/*!***************************************************!*\
+  !*** ./resources/js/vue/components/RatingBar.vue ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _RatingBar_vue_vue_type_template_id_5e7f6c78_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RatingBar.vue?vue&type=template&id=5e7f6c78&scoped=true& */ "./resources/js/vue/components/RatingBar.vue?vue&type=template&id=5e7f6c78&scoped=true&");
+/* harmony import */ var _RatingBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RatingBar.vue?vue&type=script&lang=js& */ "./resources/js/vue/components/RatingBar.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _RatingBar_vue_vue_type_style_index_0_id_5e7f6c78_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RatingBar.vue?vue&type=style&index=0&id=5e7f6c78&scoped=true&lang=css& */ "./resources/js/vue/components/RatingBar.vue?vue&type=style&index=0&id=5e7f6c78&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _RatingBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _RatingBar_vue_vue_type_template_id_5e7f6c78_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _RatingBar_vue_vue_type_template_id_5e7f6c78_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "5e7f6c78",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/vue/components/RatingBar.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/vue/components/RatingBar.vue?vue&type=script&lang=js&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/vue/components/RatingBar.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RatingBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./RatingBar.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/vue/components/RatingBar.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RatingBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/vue/components/RatingBar.vue?vue&type=style&index=0&id=5e7f6c78&scoped=true&lang=css&":
+/*!************************************************************************************************************!*\
+  !*** ./resources/js/vue/components/RatingBar.vue?vue&type=style&index=0&id=5e7f6c78&scoped=true&lang=css& ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_RatingBar_vue_vue_type_style_index_0_id_5e7f6c78_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./RatingBar.vue?vue&type=style&index=0&id=5e7f6c78&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/vue/components/RatingBar.vue?vue&type=style&index=0&id=5e7f6c78&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_RatingBar_vue_vue_type_style_index_0_id_5e7f6c78_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_RatingBar_vue_vue_type_style_index_0_id_5e7f6c78_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_RatingBar_vue_vue_type_style_index_0_id_5e7f6c78_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_RatingBar_vue_vue_type_style_index_0_id_5e7f6c78_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_RatingBar_vue_vue_type_style_index_0_id_5e7f6c78_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/vue/components/RatingBar.vue?vue&type=template&id=5e7f6c78&scoped=true&":
+/*!**********************************************************************************************!*\
+  !*** ./resources/js/vue/components/RatingBar.vue?vue&type=template&id=5e7f6c78&scoped=true& ***!
+  \**********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RatingBar_vue_vue_type_template_id_5e7f6c78_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./RatingBar.vue?vue&type=template&id=5e7f6c78&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/vue/components/RatingBar.vue?vue&type=template&id=5e7f6c78&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RatingBar_vue_vue_type_template_id_5e7f6c78_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RatingBar_vue_vue_type_template_id_5e7f6c78_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

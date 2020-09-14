@@ -11,8 +11,8 @@
         <PostItem
             :post="post"
             :needOverflowText="false"
-            :likeAction="likeAction"
-            :dislikeAction="dislikeAction"
+            :likeAction="ratePostAction.likeAction"
+            :dislikeAction="ratePostAction.dislikeAction"
             :style="{marginBottom: '20px'}"
             :styles="{
               //postItem: {flex: 1},
@@ -39,6 +39,10 @@
         <div class="comment-list-scroller">
           <CommentList
               :comments="post.comments"
+              :rateAction="{
+                likeAction: rateCommentAction.likeAction,
+                dislikeAction: rateCommentAction.dislikeAction,
+              }"
           />
         </div>
       </fragment>
@@ -59,9 +63,9 @@
     props: {
       post: Object,
       closePostView: Function,
-      likeAction: Function,
-      dislikeAction: Function,
-      commentAction: Function,
+      ratePostAction: Object,
+      commentWriteAction: Function,
+      rateCommentAction: Object,
     },
     data() {
       return {
@@ -70,7 +74,7 @@
     },
     methods: {
       clickCommentSubmit(commentId) {
-        this.commentAction(this.post.id, this.message, commentId);
+        this.commentWriteAction(this.post.id, this.message, commentId);
         this.message = "";
       }
     }
