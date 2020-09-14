@@ -54,7 +54,20 @@ class PostService
             ])
             ->orderBy('updated_at', 'desc');
         },
-        'comments.author' => function () {},
+        'comments.author' => function() {},
+        'popularComment' => function (BelongsToMany $query) {
+          $query->withCount([
+              'opinions as likes' => function (Builder $query) {
+                $query->where('value', '=', 1);
+              },
+              'opinions as dislikes' => function (Builder $query) {
+                $query->where('value', '=', 0);
+              },
+            ])
+            ->orderBy('likes', 'desc')
+            ->first();
+        },
+        'popularComment.author' => function() {},
       ])
       ->withCount([
         'opinions as likes' => function (Builder $query) {

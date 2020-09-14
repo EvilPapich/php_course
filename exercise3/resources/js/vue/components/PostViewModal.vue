@@ -38,6 +38,14 @@
           </div>
         </div>
         <div class="comment-list-scroller">
+          <CommentItem
+              :comment="post.popular_comment[0]"
+              :likeAction="rateCommentAction.likeAction"
+              :dislikeAction="rateCommentAction.dislikeAction"
+              :editAction="editCommentAction"
+              :deleteAction="deleteCommentAction"
+              :style="{border: '1px solid #CAD9FF'}"
+          />
           <CommentList
               :comments="post.comments"
               :rateAction="{
@@ -60,9 +68,10 @@
   import CloseButton from "./CloseButton";
   import PostItem from "./PostItem";
   import CommentList from "./CommentList";
+  import CommentItem from "./CommentItem";
   export default {
     name: "PostViewModal",
-    components: {CommentList, PostItem, CloseButton},
+    components: {CommentItem, CommentList, PostItem, CloseButton},
     props: {
       post: Object,
       closePostView: Function,

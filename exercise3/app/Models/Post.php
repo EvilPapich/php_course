@@ -71,4 +71,11 @@ class Post extends Model
   public function comments() {
     return $this->belongsToMany('App\Models\Comment', 'post_comments');
   }
+
+  public function popularComment() {
+    return $this->belongsToMany('App\Models\Comment', 'post_comments')
+      ->join('comment_opinions', function($join) {
+        $join->on('comment_opinions.comment_id', '=', 'post_comments.comment_id');
+      });
+  }
 }
