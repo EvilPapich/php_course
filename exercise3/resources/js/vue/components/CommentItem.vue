@@ -1,89 +1,112 @@
 <template>
-  <div class="comment-item">
-    <div class="comment-item-content">
-      <div
-          v-if="!isEdit"
-          ref="messageDiv"
-          class="comment-item-message"
-      >{{comment.message}}</div>
-      <label
-          v-else
-          class="comment-item-message-input"
-      >
-        <textarea
-            :placeholder="comment.message"
-            v-model="message"
-            :rows="textareaRows"
-        ></textarea>
-      </label>
-      <div
-          v-if="!isEdit"
-          class="comment-item-controls"
-      >
-        <IconButton
-            :color="'#ccc'"
-            :hoverColor="'#4C7DFF'"
-            :style="{marginLeft: '10px'}"
-            :action="clickToEdit"
+<fragment>
+  <div class="comment-item-wrapper">
+    <div
+        class="comment-item"
+        :style="{
+          ...styles.commentItem,
+          ...{transform: deep ? 'translate(20px, 0)' : undefined}
+        }"
+    >
+      <div class="comment-item-content">
+        <div
+            v-if="!isEdit"
+            ref="messageDiv"
+            class="comment-item-message"
+        >{{comment.message}}</div>
+        <label
+            v-else
+            class="comment-item-message-input"
         >
-          <template slot-scope="props">
-            <EditIcon :color="props.color"/>
-          </template>
-        </IconButton>
-        <IconButton
-            :color="'#ccc'"
-            :hoverColor="'#4C7DFF'"
-            :style="{marginLeft: '10px'}"
-            :action="() => refAction(comment)"
+          <textarea
+              :placeholder="comment.message"
+              v-model="message"
+              :rows="textareaRows"
+          ></textarea>
+        </label>
+        <div
+            v-if="!isEdit"
+            class="comment-item-controls"
         >
-          <template slot-scope="props">
-            <ReferIcon :color="props.color"/>
-          </template>
-        </IconButton>
-      </div>
-      <div
-          v-else
-          class="comment-item-editor-controls"
-      >
-        <IconButton
-            :color="'#ccc'"
-            :hoverColor="'#4CAF50'"
-            :style="{marginLeft: '10px'}"
-            :action="clickEditDone"
-        >
-          <template slot-scope="props">
-            <DoneIcon :color="props.color"/>
-          </template>
-        </IconButton>
-        <IconButton
-            :color="'#ccc'"
-            :hoverColor="'#F94B46'"
-            :style="{marginLeft: '10px'}"
-            :action="clickToDelete"
-        >
-          <template slot-scope="props">
-            <TrashIcon :color="props.color"/>
-          </template>
-        </IconButton>
-      </div>
-    </div>
-    <div class="comment-item-footer">
-      <div class="comment-info">
-        <div class="comment-item-updated-at">
-          {{comment.updated_at}}
+          <IconButton
+              :color="'#ccc'"
+              :hoverColor="'#4C7DFF'"
+              :style="{marginLeft: '10px'}"
+              :action="clickToEdit"
+          >
+            <template slot-scope="props">
+              <EditIcon :color="props.color"/>
+            </template>
+          </IconButton>
+          <IconButton
+              :color="'#ccc'"
+              :hoverColor="'#4C7DFF'"
+              :style="{marginLeft: '10px'}"
+              :action="() => refAction(comment)"
+          >
+            <template slot-scope="props">
+              <ReferIcon :color="props.color"/>
+            </template>
+          </IconButton>
         </div>
-        <div>
-          {{comment.author[0].lname}} {{comment.author[0].fname}}
+        <div
+            v-else
+            class="comment-item-editor-controls"
+        >
+          <IconButton
+              :color="'#ccc'"
+              :hoverColor="'#4CAF50'"
+              :style="{marginLeft: '10px'}"
+              :action="clickEditDone"
+          >
+            <template slot-scope="props">
+              <DoneIcon :color="props.color"/>
+            </template>
+          </IconButton>
+          <IconButton
+              :color="'#ccc'"
+              :hoverColor="'#F94B46'"
+              :style="{marginLeft: '10px'}"
+              :action="clickToDelete"
+          >
+            <template slot-scope="props">
+              <TrashIcon :color="props.color"/>
+            </template>
+          </IconButton>
         </div>
       </div>
-      <RatingBar
-          :likes="comment.likes"
-          :likeAction="(value) => likeAction(comment, value)"
-          :dislikes="comment.dislikes"
-          :dislikeAction="(value) => dislikeAction(comment, value)"
-      />
+      <div class="comment-item-footer">
+        <div class="comment-info">
+          <div class="comment-item-updated-at">
+            {{comment.updated_at}}
+          </div>
+          <div>
+            {{comment.author[0].lname}} {{comment.author[0].fname}}
+          </div>
+        </div>
+        <RatingBar
+            :likes="comment.likes"
+            :likeAction="(value) => likeAction(comment, value)"
+            :dislikes="comment.dislikes"
+            :dislikeAction="(value) => dislikeAction(comment, value)"
+        />
+      </div>
     </div>
   </div>
+  <CommentList
+    v-if="refered.length"
+    :comments="refered"
+    :original="original"
+    :deep="deep+1"
+    :rateAction="{
+      likeAction: likeAction,
+      dislikeAction: dislikeAction,
+    }"
+    :editAction="editAction"
+    :deleteAction="deleteAction"
+    :refAction="refAction"
+  />
+</fragment>
 </template>
 
 <script>
@@ -95,9 +118,24 @@
   import ReferIcon from "../icons/ReferIcon";
   export default {
     name: "CommentItem",
-    components: {ReferIcon, TrashIcon, DoneIcon, EditIcon, IconButton, RatingBar},
+    components: {
+      ReferIcon, TrashIcon, DoneIcon, EditIcon, IconButton, RatingBar,
+      CommentList: () => import("./CommentList"),
+    },
     props: {
       comment: Object,
+      refered: {
+        default: () => ([]),
+        type: Array,
+      },
+      original: {
+        default: () => ([]),
+        type: Array,
+      },
+      deep: {
+        default: 0,
+        type: Number
+      },
       likeAction: {
         default: ()=>{},
         type: Function,
@@ -117,6 +155,10 @@
       refAction: {
         default: ()=>{},
         type: Function,
+      },
+      styles: {
+        default: () => ({}),
+        type: Object
       },
     },
     data() {
@@ -145,9 +187,14 @@
 </script>
 
 <style scoped>
+  .comment-item-wrapper {
+    display: flex;
+    flex-direction: row;
+  }
   .comment-item {
     display: flex;
     flex-direction: column;
+    flex: 1;
     padding: 15px 20px;
     background: #f9f9f9;
     border-radius: 2px;

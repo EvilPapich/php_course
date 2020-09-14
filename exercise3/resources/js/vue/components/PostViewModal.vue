@@ -59,7 +59,9 @@
               :editAction="editCommentAction"
               :deleteAction="deleteCommentAction"
               :refAction="(item) => commentRefAction(item.id)"
-              :style="{border: '1px solid #CAD9FF'}"
+              :styles="{
+                commentItem: {border: '1px solid #CAD9FF'}
+              }"
           />
           <CommentList
               :comments="post.comments"
@@ -208,6 +210,7 @@
   }
   .comment-list-scroller {
     overflow-y: auto;
+    overflow-x: auto;
     max-width: 600px;
     padding: 0 0 0 40px;
   }

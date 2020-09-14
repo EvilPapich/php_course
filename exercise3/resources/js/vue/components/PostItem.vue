@@ -75,9 +75,7 @@
         type: Function,
       },
       styles: {
-        default: () => {
-          return {};
-        },
+        default: () => ({}),
         type: Object
       },
     },
