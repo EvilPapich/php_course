@@ -1,11 +1,12 @@
 <template>
   <div class="comment-list">
     <CommentItem
-        v-for="(comment, index) in comments"
-        :key="index"
+        v-for="(comment) in comments"
+        :key="comment.id"
         :comment="comment"
         :likeAction="rateAction.likeAction"
         :dislikeAction="rateAction.dislikeAction"
+        :editAction="editAction"
     />
   </div>
 </template>
@@ -21,6 +22,7 @@
         default: () => ({}),
         type: Object,
       },
+      editAction: Function,
     }
   }
 </script>

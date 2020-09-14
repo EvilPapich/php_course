@@ -157,6 +157,7 @@
             likeAction: (item, value) => rateComment(item.id, value),
             dislikeAction: (item, value) => rateComment(item.id, value),
           }"
+          :editCommentAction="(item, value) => editComment(item.id, value)"
       />
     </ModalLayout>
   </fragment>
@@ -580,6 +581,9 @@
         }).catch((err) => {
           alert(err.message);
         });
+      },
+      editComment(commentId, message) {
+
       },
     },
     mounted() {

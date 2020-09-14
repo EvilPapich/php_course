@@ -43,6 +43,7 @@
                 likeAction: rateCommentAction.likeAction,
                 dislikeAction: rateCommentAction.dislikeAction,
               }"
+              :editAction="editCommentAction"
           />
         </div>
       </fragment>
@@ -66,6 +67,7 @@
       ratePostAction: Object,
       commentWriteAction: Function,
       rateCommentAction: Object,
+      editCommentAction: Function,
     },
     data() {
       return {

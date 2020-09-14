@@ -1,8 +1,8 @@
 <template>
   <div class="posts-list">
     <PostItem
-        v-for="(post, postIndex) in posts"
-        :key="postIndex"
+        v-for="(post) in posts"
+        :key="post.id"
         :post="post"
         :needOverflowText="needOverflowText"
         :action="() => action(post)"
