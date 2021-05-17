@@ -50,6 +50,12 @@
   </div>
 </div>
 <script>
+  const baseUrl = 'http://localhost:8080/';
+  const baseHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  };
+
   var app = new Vue({
     el: "#app",
     data: {
@@ -59,8 +65,11 @@
     },
     methods: {
       loginHandler() {
-        fetch('api/user/login', {
+        fetch(baseUrl+'api/user/login', {
           method: 'POST',
+          headers: {
+            ...baseHeaders
+          },
           body: JSON.stringify({
             login: this.login,
             password: this.password

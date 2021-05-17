@@ -38,7 +38,7 @@
           <em>{{ post.status.name }}</em>
         </div>
         <div class="post-item-updated-at">
-          {{ post.updated_at }}
+          {{ post.updatedAt }}
         </div>
         <div class="post-item-author">
           {{ post.author.lname }} {{ post.author.fname }}

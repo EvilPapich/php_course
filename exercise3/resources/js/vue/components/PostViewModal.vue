@@ -52,7 +52,7 @@
         </div>
         <div class="comment-list-scroller">
           <CommentItem
-              v-if="post.popular_comment[0]"
+              v-if="post.popular_comment && post.popular_comment.length && post.popular_comment[0]"
               :comment="post.popular_comment[0]"
               :likeAction="rateCommentAction.likeAction"
               :dislikeAction="rateCommentAction.dislikeAction"

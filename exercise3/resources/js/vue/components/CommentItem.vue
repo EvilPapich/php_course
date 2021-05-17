@@ -81,7 +81,7 @@
             {{comment.updated_at}}
           </div>
           <div>
-            {{comment.author[0].lname}} {{comment.author[0].fname}}
+            {{comment.author.lname}} {{comment.author.fname}}
           </div>
         </div>
         <RatingBar

@@ -50,7 +50,7 @@
     },
     computed: {
       levelComments() {
-        return this.deep ? this.comments : this.comments.filter((item) => !item.pivot.reference_id);
+        return this.deep ? this.comments : this.comments.filter((item) => !item.referenceId);
       },
       originalComments() {
         return this.original.length ? this.original : _.cloneDeep(this.comments);
@@ -58,7 +58,7 @@
     },
     methods: {
       calcReferedComments(commentId) {
-        return this.originalComments.filter((item) => item.pivot.reference_id === commentId);
+        return this.originalComments.filter((item) => item.referenceId === commentId);
       },
     }
   }

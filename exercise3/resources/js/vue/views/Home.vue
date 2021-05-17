@@ -180,6 +180,12 @@
 
   const userIdHeader = 'x-user-id';
 
+  const baseUrl = 'http://localhost:8080/';
+  const baseHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  };
+
   export default {
     name: "Home",
     components: {
@@ -240,9 +246,10 @@
         window.location = '/';
       },
       fetchAuthor(userId) {
-        return fetch('api/author/get', {
+        return fetch(baseUrl+'api/author/get', {
           method: 'GET',
           headers: {
+            ...baseHeaders,
             [userIdHeader]: userId,
           },
         }).then((res) => {
@@ -291,10 +298,11 @@
         return tags.split(",").map(item => item.trim()).filter(item => item);
       },
       writeDraft() {
-        fetch('api/post/write/draft', {
+        fetch(baseUrl+'api/post/write/draft', {
           method: 'POST',
           headers: {
-            [userIdHeader]: this.user.id
+            ...baseHeaders,
+            [userIdHeader]: this.user.id,
           },
           body: JSON.stringify({
             title: this.draft.title,
@@ -317,10 +325,11 @@
         });
       },
       writePost() {
-        fetch('api/post/write/post', {
+        fetch(baseUrl+'api/post/write/post', {
           method: 'POST',
           headers: {
-            [userIdHeader]: this.user.id
+            ...baseHeaders,
+            [userIdHeader]: this.user.id,
           },
           body: JSON.stringify({
             title: this.draft.title,
@@ -344,10 +353,11 @@
       },
       getRecentPosts() {
         /*
-        return fetch('api/post/get/posts/recent', {
+        return fetch(baseUrl+'api/post/get/posts/recent', {
           method: 'GET',
           headers: {
-            [userIdHeader]: this.user.id
+            ...baseHeaders,
+            [userIdHeader]: this.user.id,
           }
         }).then((res) => {
           if (res.status === 200) {
@@ -359,10 +369,11 @@
           alert(err.message);
         });
         */
-        return fetch('api/post/get/posts/recent', {
+        return fetch(baseUrl+'api/post/get/posts/recent', {
           method: 'POST',
           headers: {
-            [userIdHeader]: this.user.id
+            ...baseHeaders,
+            [userIdHeader]: this.user.id,
           },
           body: JSON.stringify({
             filters: this.filters,
@@ -390,10 +401,11 @@
         });
       },
       getDrafts() {
-        return fetch('api/post/get/drafts', {
+        return fetch(baseUrl+'api/post/get/drafts', {
           method: 'GET',
           headers: {
-            [userIdHeader]: this.user.id
+            ...baseHeaders,
+            [userIdHeader]: this.user.id,
           }
         }).then((res) => {
           if (res.status === 200) {
@@ -406,9 +418,10 @@
         });
       },
       editDraft() {
-        fetch("api/post/edit/draft", {
+        fetch(baseUrl+"api/post/edit/draft", {
           method: "POST",
           headers: {
+            ...baseHeaders,
             [userIdHeader]: this.user.id,
           },
           body: JSON.stringify({
@@ -432,9 +445,10 @@
         });
       },
       publishDraft() {
-        fetch("api/post/publish/draft", {
+        fetch(baseUrl+"api/post/publish/draft", {
           method: "POST",
           headers: {
+            ...baseHeaders,
             [userIdHeader]: this.user.id,
           },
           body: JSON.stringify({
@@ -462,9 +476,10 @@
         });
       },
       deleteDraft() {
-        fetch("api/post/delete/draft", {
+        fetch(baseUrl+"api/post/delete/draft", {
           method: "POST",
           headers: {
+            ...baseHeaders,
             [userIdHeader]: this.user.id,
           },
           body: JSON.stringify({
@@ -493,9 +508,10 @@
         this.viewedPostId = undefined;
       },
       ratePost(postId, value) {
-        fetch("api/post/rate/post", {
+        fetch(baseUrl+"api/post/rate/post", {
           method: "POST",
           headers: {
+            ...baseHeaders,
             [userIdHeader]: this.user.id,
           },
           body: JSON.stringify({
@@ -537,9 +553,10 @@
         this.tags = this.tags.filter(item => item.id !== tag.id);
       },
       writeComment(postId, message, refId) {
-        fetch("api/post/write/post/comment", {
+        fetch(baseUrl+"api/post/write/post/comment", {
           method: "POST",
           headers: {
+            ...baseHeaders,
             [userIdHeader]: this.user.id,
           },
           body: JSON.stringify({
@@ -561,9 +578,10 @@
         });
       },
       rateComment(commentId, value) {
-        fetch("api/post/rate/post/comment", {
+        fetch(baseUrl+"api/post/rate/post/comment", {
           method: "POST",
           headers: {
+            ...baseHeaders,
             [userIdHeader]: this.user.id,
           },
           body: JSON.stringify({
@@ -584,9 +602,10 @@
         });
       },
       editComment(commentId, message) {
-        fetch("api/post/edit/post/comment", {
+        fetch(baseUrl+"api/post/edit/post/comment", {
           method: "POST",
           headers: {
+            ...baseHeaders,
             [userIdHeader]: this.user.id,
           },
           body: JSON.stringify({
@@ -607,9 +626,10 @@
         });
       },
       deleteComment(commentId) {
-        fetch("api/post/delete/post/comment", {
+        fetch(baseUrl+"api/post/delete/post/comment", {
           method: "POST",
           headers: {
+            ...baseHeaders,
             [userIdHeader]: this.user.id,
           },
           body: JSON.stringify({
